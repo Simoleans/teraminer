@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CustomerController extends Controller
 {
@@ -12,7 +13,9 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Customers/Index', [
+            'customers' => Customer::all(),
+        ]);
     }
 
     /**
@@ -20,7 +23,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Customers/Create');
     }
 
     /**
@@ -28,7 +31,16 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'address' => 'required',
+            'phone' => 'required',
+        ]);
+
+        Customer::create($request->all());
+
+        return redirect()->route('customers.index')
+            ->with('success', 'Customer created successfully.');
     }
 
     /**
@@ -44,7 +56,9 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        //
+        return Inertia::render('Customers/Edit', [
+            'customer' => $customer,
+        ]);
     }
 
     /**
@@ -52,7 +66,16 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'address' => 'required',
+            'phone' => 'required',
+        ]);
+
+        $customer->update($request->all());
+
+        return redirect()->route('customers.index')
+            ->with('success', 'Customer updated successfully.');
     }
 
     /**
@@ -60,6 +83,11 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        if ($customer->invoices()->count() > 0) {
+            return redirect()->route('customers.index')
+                ->with('error', 'Customer cannot be deleted because it has invoices.');
+        }
+
+        $customer->delete();
     }
 }

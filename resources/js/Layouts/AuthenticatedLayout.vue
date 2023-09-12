@@ -32,6 +32,13 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Inicio
                                 </NavLink>
+                                <NavLink :href="route('sellers.index')" :active="route().current('sellers.*')">
+                                    Vendedores
+                                </NavLink>
+                                <NavLink :href="route('customers.index')" :active="route().current('customers.*')">
+                                    Clientes
+                                </NavLink>
+
                             </div>
                         </div>
 
@@ -65,6 +72,8 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <DropdownLink :href="route('profile.edit')"> Perfil </DropdownLink>
+                                        <DropdownLink :href="route('data.index')"> Data </DropdownLink>
+                                        <hr>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             Salir
                                         </DropdownLink>

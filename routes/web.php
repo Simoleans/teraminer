@@ -5,6 +5,11 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+//controllers
+use App\Http\Controllers\DataController;
+use App\Http\Controllers\SellerController;
+use App\Http\Controllers\CustomerController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,6 +38,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+    //Data
+    Route::resource('/data', DataController::class);
+
+    //sellers
+    Route::resource('/sellers', SellerController::class);
+
+    //customers
+    Route::resource('/customers', CustomerController::class);
 });
 
 require __DIR__.'/auth.php';

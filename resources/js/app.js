@@ -6,6 +6,22 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 
+import VueSweetalert2 from 'vue-sweetalert2'
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+//primeVue
+import PrimeVue from "primevue/config";
+import "primevue/resources/themes/tailwind-light/theme.css";
+import "primevue/resources/primevue.min.css";
+import "primeicons/primeicons.css";
+
+//primeVue
+/* import PrimeVue from "primevue/config";
+import "primevue/resources/themes/tailwind-light/theme.css";
+import "primevue/resources/primevue.min.css";
+import "primeicons/primeicons.css"; */
+
+
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
@@ -15,6 +31,8 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue, Ziggy)
+            .use(VueSweetalert2)
+            .use(PrimeVue)
             .mount(el);
     },
     progress: {

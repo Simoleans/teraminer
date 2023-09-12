@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Data;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class DataController extends Controller
 {
@@ -12,7 +13,8 @@ class DataController extends Controller
      */
     public function index()
     {
-        //
+        $data = Data::first();
+        return Inertia::render('Data/Edit',compact('data'));
     }
 
     /**
@@ -44,7 +46,7 @@ class DataController extends Controller
      */
     public function edit(Data $data)
     {
-        //
+
     }
 
     /**
@@ -52,7 +54,11 @@ class DataController extends Controller
      */
     public function update(Request $request, Data $data)
     {
-        //
+        //dd($data);
+
+        $data->update($request->all());
+
+        return redirect()->route('data.index');
     }
 
     /**
