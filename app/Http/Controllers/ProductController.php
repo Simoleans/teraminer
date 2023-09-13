@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
@@ -12,7 +13,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Products/Index', [
+            'products' => Product::all(),
+        ]);
     }
 
     /**
@@ -20,7 +23,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Products/Create');
     }
 
     /**
@@ -28,7 +31,24 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'code_number' => 'required|numeric|unique:products',
+            'name' => ['required'],
+            'unit_price' => ['required', 'numeric'],
+        ],
+        [
+            'code_number.required' => 'Code number is required',
+            'code_number.numeric' => 'Code number must be numeric',
+            'code_number.unique' => 'Ya existe un producto con este codigo',
+            'name.required' => 'Name is required',
+            'unit_price.required' => 'Unit price is required',
+            'unit_price.numeric' => 'Unit price must be numeric',
+        ]);
+
+
+        Product::create($request->all());
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -44,7 +64,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return Inertia::render('Products/Edit', [
+            'product' => $product,
+        ]);
     }
 
     /**
@@ -60,6 +82,12 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        if ($product->invoices->count() > 0) {
+            return redirect()->route('products.index')->with('error', 'No se puede eliminar el producto porque tiene ordenes asociadas');
+        }
+
+        $product->delete();
+
+        return redirect()->route('products.index');
     }
 }

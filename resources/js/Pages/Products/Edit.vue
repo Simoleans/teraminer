@@ -5,28 +5,34 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { ref } from 'vue';
 import Swal from 'sweetalert2'
 
 
 
-const formData = useForm({
-  name : '',
-  address: '',
-  phone: '',
-  email: '',
-  website: ''
+
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true
+  }
 });
 
-const handleStoreData = () => {
-    formData.post(route("sellers.store"), {
+const formData = useForm({
+  id: props.product.id,
+  code_number: props.product.code_number,
+  name: props.product.name,
+  unit_price: props.product.unit_price,
+});
+
+const handleEditProduct = () => {
+    formData.put(route("products.update",{ product: props.product.id }), {
         onStart: () => console.log("start"),
         onFinish: () => console.log("finish"),
         onError: (error) => console.log(error),
         onSuccess: () => {
             Swal.fire({
-                title: 'Creado',
-                text: 'Se ha creado el vendedor',
+                title: 'Actualizado',
+                text: 'Se ha actualizado la información',
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
             })
@@ -38,50 +44,46 @@ const handleStoreData = () => {
 </script>
 
 <template>
-    <Head title="Vendedor" />
+    <Head title="Producto" />
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Vendedor</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Producto</h2>
         </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 p-3 sm:flex gap-[2.75rem] ">
                 <div class="mb-4">
-                    <span>Crear Vendedor</span><br>
-                    <!-- <small>Data principal de la empresa (Saldra en la factura de encabezado)</small> -->
+                    <span>Editar Producto</span><br>
                 </div>
                 <div class="grow bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
-                        <form @submit.prevent="handleStoreData" method="POST">
+                        <form @submit.prevent="handleEditProduct()" method="POST">
+
+                            <div class="mt-4">
+                                <InputLabel for="code_number" value="Cédula" />
+                                <TextInput id="code_number" class="block mt-1 w-full" type="text" name="code_number" v-model="formData.code_number"  required autofocus />
+                            </div>
+
                             <div class="mt-4">
                                 <InputLabel for="name" value="Nombre" />
                                 <TextInput id="name" class="block mt-1 w-full" type="text" name="name" v-model="formData.name"  required autofocus />
                             </div>
 
                             <div class="mt-4">
-                                <InputLabel for="address" value="Dirección" />
-                                <TextInput id="address" class="block mt-1 w-full" type="text" name="address" v-model="formData.address"  required />
-                            </div>
-
-                            <div class="mt-4">
-                                <InputLabel for="phone" value="Teléfono" />
-                                <TextInput id="phone" class="block mt-1 w-full" type="text" name="phone" v-model="formData.phone"  required />
-                            </div>
-
-                            <div class="mt-4">
-                                <InputLabel for="email" value="Email" />
-                                <TextInput id="email" class="block mt-1 w-full" type="email" name="email" v-model="formData.email"  required />
+                                <InputLabel for="unit_price" value="Dirección" />
+                                <TextInput id="unit_price" class="block mt-1 w-full" type="text" name="unit_price" v-model="formData.unit_price"  required />
                             </div>
 
                             <div class="flex items-center justify-end mt-4">
-                                <Link :href="route('sellers.index')" class="ml-4">
+                                <Link :href="route('products.index')" class="ml-4">
                                     Volver
                                 </Link>
                                 <PrimaryButton class="ml-4">
-                                    Crear
+                                    Actualizar
                                 </PrimaryButton>
                             </div>
+
                         </form>
                     </div>
                 </div>

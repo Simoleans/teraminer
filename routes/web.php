@@ -9,6 +9,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,9 @@ Route::middleware('auth')->group(function () {
 
     //customers
     Route::resource('/customers', CustomerController::class);
+
+    //products
+    Route::resource('/products', ProductController::class);
 });
 
 require __DIR__.'/auth.php';

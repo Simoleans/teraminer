@@ -14,4 +14,14 @@ class Product extends Model
         'code_number',
         'unit_price',
     ];
+
+    public function getUnitPriceAttribute($value)
+    {
+        return '$' . $value;
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }
