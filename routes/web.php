@@ -10,6 +10,7 @@ use App\Http\Controllers\DataController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,11 @@ Route::middleware('auth')->group(function () {
 
     //products
     Route::resource('/products', ProductController::class);
+
+    //invoice
+
+    Route::get('/search-customer', [InvoiceController::class, 'searchCustomer']);
+
 });
 
 require __DIR__.'/auth.php';

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use App\Models\Customer;
 
 class InvoiceController extends Controller
 {
@@ -61,5 +62,13 @@ class InvoiceController extends Controller
     public function destroy(Invoice $invoice)
     {
         //
+    }
+
+    public function searchCustomer(Request $request)
+    {
+        $term = $request->input('term');
+        $customers = Customer::where('name', 'like', '%'.$term.'%')->get();
+
+        return response()->json($customers);
     }
 }
