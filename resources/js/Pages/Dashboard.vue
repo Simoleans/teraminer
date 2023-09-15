@@ -8,6 +8,8 @@ import TextInput from '@/Components/TextInput.vue';
 import { ref, watch } from 'vue';
 import axios from 'axios';
 import Info from '@/Components/Invoice/Info.vue';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 
 const handleInvoiceStore = () => {
     Swal.fire({
@@ -31,6 +33,12 @@ const searchProduct = ref('');
 const customers = ref([]);
 const sellers = ref([]);
 const products = ref('');
+const productsArray = ref([]);
+
+
+const total = ref('');
+const subTotal = ref('');
+const totalProduct = ref('');
 
 const infoSeller = ref(
 {
@@ -101,6 +109,16 @@ const selectSeller = (seller) => {
   infoSeller.value = { ...seller };
 };
 
+//productos
+const addProduct = (product) => {
+    productsArray.value.push(product);
+    console.log(productsArray.value);
+    /* formData.name = '';
+    formData.unit_price = ''; */
+    searchProduct.value = '';
+    products.value = [];
+};
+
 
 </script>
 
@@ -167,23 +185,46 @@ const selectSeller = (seller) => {
             <div class="w-full sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900">Inicio Teraminer</div>
-                    <div class="grid grid-cols-1 gap-4">
-                        <div class="p-5">
+                    <div class="flex justify-between">
+                        <div class="p-10 grow">
                             <InputLabel for="product" value="Producto" />
                             <TextInput id="product" class="block mt-1 w-full" type="text" name="product" v-model="searchProduct"  required autocomplete="false"/>
-                            <!-- <InputError class="mt-2" :message="formData.errors.customer_id" /> -->
                             <div class="flex flex-col">
                                 <ul v-if="products.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
-                                    <li v-for="product in products" :key="product.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectCustomer(product)">{{ product.name }}</li>
+                                    <li v-for="product in products" :key="product.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="addProduct(product)">{{ product.name }} - {{ product.code_number}}</li>
                                 </ul>
+                            </div>
+                        </div>
+                        <div class="p-10" >
+                            <div class="bg-white shadow-lg rounded-lg p-6 border-dashed border-2 border-[#6A3989]">
+                                <h2 class="text-2xl font-bold mb-4">Factura</h2>
+                                <div class="flex justify-between mb-4">
+                                    <span class="font-bold">Sub: </span>
+                                    <span v-text="subTotal"></span>
+                                </div>
+                                <div class="flex justify-between mb-4">
+                                    <span class="font-bold">Total: </span><br>
+                                    <span v-text="total"></span>
+                                </div>
                             </div>
 
                         </div>
-
                     </div>
-
-
-
+                    <DataTable :value="productsArray" :class="p-datatable-lg" tableStyle="min-width: 50rem" class="p-10">
+                            <Column field="name" header="Nombre"></Column>
+                            <Column field="code_number" header="Codigo"></Column>
+                            <Column field="price" header="Precio"></Column>
+                            <Column field="quantity" header="Cantidad" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
+                                <template #body="{ data }">
+                                    <TextInput id="quantity" class="block mt-1 w-full" type="number" name="quantity" value="1" required autofocus autocomplete="false"/>
+                                </template>
+                            </Column>
+                            <Column field="total_product" header="Total" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
+                                <template #body="{ data }">
+                                    <span v-text="totalProduct"></span>
+                                </template>
+                            </Column>
+                        </DataTable>
                 </div>
             </div>
         </div>

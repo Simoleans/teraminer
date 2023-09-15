@@ -85,6 +85,15 @@ class InvoiceController extends Controller
         $term = $request->input('term');
         $products = Product::where('name', 'like', '%'.$term.'%')->get();
 
+        //map Product
+        $products->map(function ($product) {
+            $product->price = '$' . $product->unit_price;
+            $product->unit_price = $product->unit_price;
+            $product->code_number = $product->code_number;
+            $product->name = $product->name;
+
+        });
+
         return response()->json($products);
     }
 }

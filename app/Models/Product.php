@@ -15,10 +15,10 @@ class Product extends Model
         'unit_price',
     ];
 
-    public function getUnitPriceAttribute($value)
+    /* public function getUnitPriceAttribute($value)
     {
         return '$' . $value;
-    }
+    } */
 
     public function invoices()
     {
