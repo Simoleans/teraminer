@@ -57,6 +57,7 @@ Route::middleware('auth')->group(function () {
     //invoice
 
     Route::get('/search-customer', [InvoiceController::class, 'searchCustomer']);
+    Route::get('/search-seller', [InvoiceController::class, 'searchSeller']);
 
 });
 
