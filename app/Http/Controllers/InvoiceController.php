@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use Illuminate\Http\Request;
-use App\Models\{Customer,Seller};
+use App\Models\{Customer,Seller,Product};
 
 class InvoiceController extends Controller
 {
@@ -78,5 +78,13 @@ class InvoiceController extends Controller
         $sellers = Seller::where('name', 'like', '%'.$term.'%')->get();
 
         return response()->json($sellers);
+    }
+
+    public function searchProduct(Request $request)
+    {
+        $term = $request->input('term');
+        $products = Product::where('name', 'like', '%'.$term.'%')->get();
+
+        return response()->json($products);
     }
 }
