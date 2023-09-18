@@ -8,8 +8,9 @@ import TextInput from '@/Components/TextInput.vue';
 import { ref, watch,computed } from 'vue';
 import axios from 'axios';
 import Info from '@/Components/Invoice/Info.vue';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
+import Facturacion from '@/Components/Invoice/Facturacion.vue';
+import TablaFacturacion from '@/Components/Invoice/TablaFacturacion.vue';
+
 
 const handleInvoiceStore = () => {
     Swal.fire({
@@ -33,30 +34,29 @@ const searchProduct = ref('');
 const customers = ref([]);
 const sellers = ref([]);
 const products = ref('');
-const productsArray = ref([]);
+/* const productsArray = ref([]);
 
 
 const totalInvoice = ref('');
 const subTotal = ref('');
 const subTotalFormat = ref('');
-const totalProduct = ref('');
+const totalProduct = ref(''); */
 
-const discount = ref(0);
-const discountFormat = ref();
+const invoice = ref({
+    subTotalFormat: '',
+    discountFormat: '',
+    totalProduct: '',
+    totalInvoice: '',
+    discount: '',
+    subTotal: '',
+    productsArray: [],
+})
 
-// Definir la variable quantityProduct como ref
-const quantityProduct = ref(0); // Asegúrate de inicializarla con el valor adecuado
+//const discount = ref(0);
+//const discountFormat = ref();
 
 
-const updateTotal = (data,event) => {
-    if(event.target.value < 1){
-        event.target.value = 1;
-    }
-    totalProduct.value = event.target.value * data.unit_price;
-    data.total_product = event.target.value * data.unit_price;
 
-    suma()
-}
 
 
 
@@ -132,16 +132,16 @@ const selectSeller = (seller) => {
 
 //productos
 const addProduct = (product) => {
-  const index = productsArray.value.findIndex((p) => p.name === product.name);
+  const index = invoice.value.productsArray.findIndex((p) => p.name === product.name);
 
   if (index >= 0) {
-    productsArray.value[index].quantity += 1;
-    console.log(productsArray.value[index].quantity,product,product.quantity);
-    productsArray.value[index].total_product = parseInt(productsArray.value[index].quantity)  * parseInt(product.unit_price);
+    invoice.value.productsArray[index].quantity += 1;
+    //console.log(invoice.value.productsArray[index].quantity,product,product.quantity);
+    invoice.value.productsArray[index].total_product = parseInt(invoice.value.productsArray[index].quantity)  * parseInt(product.unit_price);
   } else {
     product.quantity = 1;
     product.total_product = parseInt(product.unit_price);
-    productsArray.value.push(product);
+    invoice.value.productsArray.push(product);
   }
 
   searchProduct.value = '';
@@ -152,21 +152,22 @@ const addProduct = (product) => {
 const suma = () => {
     let total = parseInt(0);
     let sub = parseInt(0);
-    productsArray.value.forEach((product) => {
-        total += product.total_product - (product.total_product * discount.value / 100);
+    invoice.value.productsArray.forEach((product) => {
+        total += product.total_product - (product.total_product *  invoice.value.discount / 100);
         sub += product.total_product;
 
     });
 
-    totalInvoice.value = total;
-    subTotal.value = sub;
-    subTotalFormat.value = '$'+sub;
-    discountFormat.value = '- $'+sub * discount.value / 100;
+    invoice.value.totalInvoice = total;
+    invoice.value.subTotal = sub;
+    invoice.value.subTotalFormat = '$'+sub;
+    invoice.value.discountFormat = '- $'+sub * invoice.value.discount / 100;
+
 
 };
 
 //watch discount
-watch(discount, (newTerm) => {
+watch(invoice.value, (newTerm) => {
     suma();
 });
 
@@ -174,8 +175,8 @@ watch(discount, (newTerm) => {
 //computed total
 const totalInvoiceGeneral = computed(() => {
     let total = parseInt(0);
-    productsArray.value.forEach((product) => {
-        total += product.total_product - (product.total_product * discount.value / 100);
+    invoice.value.productsArray.forEach((product) => {
+        total += product.total_product - (product.total_product * invoice.value.discount / 100);
     });
 
     return '$'+total;
@@ -184,7 +185,7 @@ const totalInvoiceGeneral = computed(() => {
 //computed subtotal
 const subTotalGeneral = computed(() => {
     let total = parseInt(0);
-    productsArray.value.forEach((product) => {
+    invoice.value.productsArray.forEach((product) => {
         total += product.total_product;
     });
 
@@ -269,47 +270,11 @@ const subTotalGeneral = computed(() => {
                         </div>
                         <div class="p-10">
                             <InputLabel for="discount" value="Descuento (%)" />
-                            <TextInput id="discount" class="block mt-1 w-full" type="text" name="discount" v-model="discount"  required autocomplete="false"/>
+                            <TextInput id="discount" class="block mt-1 w-full" type="text" name="discount" v-model="invoice.discount"  required autocomplete="false"/>
                         </div>
-                        <div class="p-10 grow">
-                            <div class="bg-white shadow-lg rounded-lg p-6 border-dashed border-2 border-[#6A3989]">
-                                <h2 class="text-2xl font-bold mb-4">Factura</h2>
-                                <div class="flex justify-between mb-4">
-                                    <span class="font-bold">Sub: </span>
-                                    <span v-text="subTotalGeneral"></span>
-                                </div>
-                                <div v-if="discount != 0" class="flex justify-between mb-4">
-                                    <span class="font-bold">Descuento: </span>
-                                    <span v-text="discountFormat"></span>
-                                </div>
-                                <div class="flex justify-between mb-4">
-                                    <span class="font-bold">Total: </span><br>
-                                    <span class="font-bold text-2xl" v-text="totalInvoiceGeneral"></span>
-                                </div>
-                            </div>
-                        </div>
+                        <Facturacion :subTotalGeneral="subTotalGeneral" :totalInvoiceGeneral="totalInvoiceGeneral" :discount="discount" :invoice="invoice" />
                     </div>
-                    <DataTable :value="productsArray" :class="p-datatable-lg" tableStyle="min-width: 50rem" class="p-10">
-                        <Column field="name" header="Nombre"></Column>
-                        <Column field="code_number" header="Codigo"></Column>
-                        <Column field="price" header="Precio"></Column>
-                        <Column field="quantity" header="Cantidad" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
-                            <template #body="{ data }">
-                                <TextInput id="quantity" class="block mt-1 w-full" type="number" name="quantity" @change="updateTotal(data,$event)" v-model="data.quantity" required autofocus autocomplete="false"/>
-                            </template>
-                        </Column>
-                        <Column field="total_product" header="Total" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
-                            <template #body="{ data }">
-                                <span v-text="data.total_product"></span>
-                            </template>
-                        </Column>
-                        <Column field="total_product" header="Total" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
-                            <template #body="{ data }">
-                                <!-- button delete -->
-                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="productsArray.splice(productsArray.indexOf(data), 1)">Eliminar</button>
-                            </template>
-                        </Column>
-                    </DataTable>
+                    <TablaFacturacion :productsArray="invoice.productsArray" :invoice="invoice" />
                 </div>
             </div>
         </div>
