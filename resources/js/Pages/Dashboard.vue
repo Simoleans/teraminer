@@ -54,7 +54,7 @@ const updateTotal = (data,event) => {
     }
     totalProduct.value = event.target.value * data.unit_price;
     data.total_product = event.target.value * data.unit_price;
-    console.log(totalProduct.value);
+
     suma()
 }
 
@@ -77,6 +77,7 @@ const infoCustomer = ref(
     email: '',
 
 });
+
 
 watch(searchProduct, (newTerm) => {
     customers.value = [];
@@ -131,13 +132,21 @@ const selectSeller = (seller) => {
 
 //productos
 const addProduct = (product) => {
+  const index = productsArray.value.findIndex((p) => p.name === product.name);
+
+  if (index >= 0) {
+    productsArray.value[index].quantity += 1;
+    console.log(productsArray.value[index].quantity,product,product.quantity);
+    productsArray.value[index].total_product = parseInt(productsArray.value[index].quantity)  * parseInt(product.unit_price);
+  } else {
     product.quantity = 1;
     product.total_product = parseInt(product.unit_price);
     productsArray.value.push(product);
+  }
 
-    searchProduct.value = '';
-    products.value = [];
-    suma();
+  searchProduct.value = '';
+  products.value = [];
+  suma();
 };
 
 const suma = () => {
@@ -197,7 +206,7 @@ const subTotalGeneral = computed(() => {
             <!-- info customer and seller -->
             <div class="max-w-7xl w-full md:lg:w-3/5 sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-4 text-gray-900">Inicio Teraminer</div>
+                    <div class="p-4 text-gray-900">Cliente/Vendedor</div>
                     <!-- <Link class="inline-flex items-center px-4 py-2 m-5 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150" :href="route('dashboard')">Factura</Link> -->
 
                     <div class="grow bg-white overflow-hidden shadow-xl sm:rounded-lg">
@@ -221,7 +230,7 @@ const subTotalGeneral = computed(() => {
                                         <InputError class="mt-2" :message="formData.errors.seller_id" />
                                         <div class="flex flex-col">
                                             <ul v-if="sellers.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
-                                                <li v-for="seller in sellers" :key="seller.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectSeller(seller)">{{ seller.name }} - {{ customer.id_card_number}}</li>
+                                                <li v-for="seller in sellers" :key="seller.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectSeller(seller)">{{ seller.name }} - {{ seller.id_card_number }}</li>
                                             </ul>
                                         </div>
 
@@ -247,8 +256,8 @@ const subTotalGeneral = computed(() => {
             <!-- info customer and seller -->
             <div class="w-full sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-4 text-gray-900">Inicio Teraminer</div>
-                    <div class="flex flex-col md:lg:flex-row justify-between">
+                    <div class="p-4 text-gray-900">Productos</div>
+                    <div class="flex  md:lg:flex-row justify-between flex-col-reverse">
                         <div class="p-10 grow">
                             <InputLabel for="product" value="Producto" />
                             <TextInput id="product" class="block mt-1 w-full" type="text" name="product" v-model="searchProduct"  required autocomplete="false"/>
@@ -262,7 +271,7 @@ const subTotalGeneral = computed(() => {
                             <InputLabel for="discount" value="Descuento (%)" />
                             <TextInput id="discount" class="block mt-1 w-full" type="text" name="discount" v-model="discount"  required autocomplete="false"/>
                         </div>
-                        <div class="p-10 grow" >
+                        <div class="p-10 grow">
                             <div class="bg-white shadow-lg rounded-lg p-6 border-dashed border-2 border-[#6A3989]">
                                 <h2 class="text-2xl font-bold mb-4">Factura</h2>
                                 <div class="flex justify-between mb-4">
