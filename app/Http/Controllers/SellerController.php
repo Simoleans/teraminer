@@ -37,6 +37,9 @@ class SellerController extends Controller
             'name' => 'required',
             'email' => 'required',
             'phone' => 'required',
+        ],
+        [
+            'id_card_number.unique' => 'Cedula/RIF Ya Existe.',
         ]);
 
         Seller::create($request->all());
@@ -73,6 +76,9 @@ class SellerController extends Controller
             'name' => 'required',
             'email' => 'required',
             'phone' => 'required',
+        ],
+        [
+            'id_card_number.unique' => 'Cedula/RIF Ya Existe.',
         ]);
 
         $seller->update($request->all());

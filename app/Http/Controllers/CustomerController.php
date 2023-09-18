@@ -36,6 +36,9 @@ class CustomerController extends Controller
             'name' => 'required',
             'address' => 'required',
             'phone' => 'required',
+        ],
+        [
+            'id_card_number.unique' => 'Cedula/RIF Ya Existe.',
         ]);
 
         Customer::create($request->all());
@@ -68,9 +71,13 @@ class CustomerController extends Controller
     public function update(Request $request, Customer $customer)
     {
         $request->validate([
+            'id_card_number' => 'unique:customers,id_card_number,' . $customer->id,
             'name' => 'required',
             'address' => 'required',
             'phone' => 'required',
+        ],
+        [
+            'id_card_number.unique' => 'Cedula/RIF Ya Existe.',
         ]);
 
         $customer->update($request->all());
