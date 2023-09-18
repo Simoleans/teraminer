@@ -33,6 +33,7 @@ class SellerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'id_card_number' => 'unique:sellers', //unique:table,column,except,idColumn
             'name' => 'required',
             'email' => 'required',
             'phone' => 'required',
@@ -68,6 +69,7 @@ class SellerController extends Controller
     public function update(Request $request, Seller $seller)
     {
         $request->validate([
+            'id_card_number' => 'unique:sellers,id_card_number,' . $seller->id, //unique:table,column,except,idColumn
             'name' => 'required',
             'email' => 'required',
             'phone' => 'required',

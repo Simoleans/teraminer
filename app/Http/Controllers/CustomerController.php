@@ -32,6 +32,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'id_card_number' => 'unique:customers',
             'name' => 'required',
             'address' => 'required',
             'phone' => 'required',

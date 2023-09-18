@@ -64,6 +64,7 @@ const handleEditData = () => {
                             <div class="mt-4">
                                 <InputLabel for="id_card_number" value="Cédula/RIF" />
                                 <TextInput id="id_card_number" class="block mt-1 w-full" type="text" name="id_card_number" v-model="formData.id_card_number"  required autofocus />
+                                <InputError class="mt-2" :message="formData.errors.id_card_number" />
                             </div>
 
                             <div class="mt-4">
