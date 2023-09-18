@@ -172,6 +172,16 @@ const totalInvoiceGeneral = computed(() => {
     return '$'+total;
 });
 
+//computed subtotal
+const subTotalGeneral = computed(() => {
+    let total = parseInt(0);
+    productsArray.value.forEach((product) => {
+        total += product.total_product;
+    });
+
+    return '$'+total;
+});
+
 
 </script>
 
@@ -200,7 +210,7 @@ const totalInvoiceGeneral = computed(() => {
                                         <InputError class="mt-2" :message="formData.errors.customer_id" />
                                         <div class="flex flex-col">
                                             <ul v-if="customers.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
-                                                <li v-for="customer in customers" :key="customer.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectCustomer(customer)">{{ customer.name }}</li>
+                                                <li v-for="customer in customers" :key="customer.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectCustomer(customer)">{{ customer.name }} - {{ customer.id_card_number}}</li>
                                             </ul>
                                         </div>
 
@@ -211,7 +221,7 @@ const totalInvoiceGeneral = computed(() => {
                                         <InputError class="mt-2" :message="formData.errors.seller_id" />
                                         <div class="flex flex-col">
                                             <ul v-if="sellers.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
-                                                <li v-for="seller in sellers" :key="seller.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectSeller(seller)">{{ seller.name }}</li>
+                                                <li v-for="seller in sellers" :key="seller.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectSeller(seller)">{{ seller.name }} - {{ customer.id_card_number}}</li>
                                             </ul>
                                         </div>
 
@@ -257,7 +267,7 @@ const totalInvoiceGeneral = computed(() => {
                                 <h2 class="text-2xl font-bold mb-4">Factura</h2>
                                 <div class="flex justify-between mb-4">
                                     <span class="font-bold">Sub: </span>
-                                    <span v-text="subTotalFormat"></span>
+                                    <span v-text="subTotalGeneral"></span>
                                 </div>
                                 <div v-if="discount != 0" class="flex justify-between mb-4">
                                     <span class="font-bold">Descuento: </span>
@@ -282,6 +292,12 @@ const totalInvoiceGeneral = computed(() => {
                         <Column field="total_product" header="Total" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
                             <template #body="{ data }">
                                 <span v-text="data.total_product"></span>
+                            </template>
+                        </Column>
+                        <Column field="total_product" header="Total" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
+                            <template #body="{ data }">
+                                <!-- button delete -->
+                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="productsArray.splice(productsArray.indexOf(data), 1)">Eliminar</button>
                             </template>
                         </Column>
                     </DataTable>
