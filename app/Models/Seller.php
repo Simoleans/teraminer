@@ -11,6 +11,7 @@ class Seller extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id_card_number',
         'name',
         'address',
         'phone',

@@ -18,6 +18,7 @@ const props = defineProps({
 });
 
 const formData = useForm({
+  id_card_number: props.seller.id_card_number,
   id: props.seller.id,
   name: props.seller.name,
   address: props.seller.address,
@@ -60,6 +61,11 @@ const handleEditData = () => {
                 <div class="grow bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <form @submit.prevent="handleEditData()" method="POST">
+                            <div class="mt-4">
+                                <InputLabel for="id_card_number" value="Cédula/RIF" />
+                                <TextInput id="id_card_number" class="block mt-1 w-full" type="text" name="id_card_number" v-model="formData.id_card_number"  required autofocus />
+                            </div>
+
                             <div class="mt-4">
                                 <InputLabel for="name" value="Nombre" />
                                 <TextInput id="name" class="block mt-1 w-full" type="text" name="name" v-model="formData.name"  required autofocus />

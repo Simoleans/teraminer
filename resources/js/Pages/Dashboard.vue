@@ -5,7 +5,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { ref, watch } from 'vue';
+import { ref, watch,computed } from 'vue';
 import axios from 'axios';
 import Info from '@/Components/Invoice/Info.vue';
 import DataTable from 'primevue/datatable';
@@ -36,9 +36,29 @@ const products = ref('');
 const productsArray = ref([]);
 
 
-const total = ref('');
+const totalInvoice = ref('');
 const subTotal = ref('');
+const subTotalFormat = ref('');
 const totalProduct = ref('');
+
+const discount = ref(0);
+const discountFormat = ref();
+
+// Definir la variable quantityProduct como ref
+const quantityProduct = ref(0); // Asegúrate de inicializarla con el valor adecuado
+
+
+const updateTotal = (data,event) => {
+    if(event.target.value < 1){
+        event.target.value = 1;
+    }
+    totalProduct.value = event.target.value * data.unit_price;
+    data.total_product = event.target.value * data.unit_price;
+    console.log(totalProduct.value);
+    suma()
+}
+
+
 
 const infoSeller = ref(
 {
@@ -111,13 +131,46 @@ const selectSeller = (seller) => {
 
 //productos
 const addProduct = (product) => {
+    product.quantity = 1;
+    product.total_product = parseInt(product.unit_price);
     productsArray.value.push(product);
-    console.log(productsArray.value);
-    /* formData.name = '';
-    formData.unit_price = ''; */
+
     searchProduct.value = '';
     products.value = [];
+    suma();
 };
+
+const suma = () => {
+    let total = parseInt(0);
+    let sub = parseInt(0);
+    productsArray.value.forEach((product) => {
+        total += product.total_product - (product.total_product * discount.value / 100);
+        sub += product.total_product;
+
+    });
+
+    totalInvoice.value = total;
+    subTotal.value = sub;
+    subTotalFormat.value = '$'+sub;
+    discountFormat.value = '- $'+sub * discount.value / 100;
+
+};
+
+//watch discount
+watch(discount, (newTerm) => {
+    suma();
+});
+
+
+//computed total
+const totalInvoiceGeneral = computed(() => {
+    let total = parseInt(0);
+    productsArray.value.forEach((product) => {
+        total += product.total_product - (product.total_product * discount.value / 100);
+    });
+
+    return '$'+total;
+});
 
 
 </script>
@@ -185,7 +238,7 @@ const addProduct = (product) => {
             <div class="w-full sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900">Inicio Teraminer</div>
-                    <div class="flex justify-between">
+                    <div class="flex flex-col md:lg:flex-row justify-between">
                         <div class="p-10 grow">
                             <InputLabel for="product" value="Producto" />
                             <TextInput id="product" class="block mt-1 w-full" type="text" name="product" v-model="searchProduct"  required autocomplete="false"/>
@@ -195,36 +248,43 @@ const addProduct = (product) => {
                                 </ul>
                             </div>
                         </div>
-                        <div class="p-10" >
+                        <div class="p-10">
+                            <InputLabel for="discount" value="Descuento (%)" />
+                            <TextInput id="discount" class="block mt-1 w-full" type="text" name="discount" v-model="discount"  required autocomplete="false"/>
+                        </div>
+                        <div class="p-10 grow" >
                             <div class="bg-white shadow-lg rounded-lg p-6 border-dashed border-2 border-[#6A3989]">
                                 <h2 class="text-2xl font-bold mb-4">Factura</h2>
                                 <div class="flex justify-between mb-4">
                                     <span class="font-bold">Sub: </span>
-                                    <span v-text="subTotal"></span>
+                                    <span v-text="subTotalFormat"></span>
+                                </div>
+                                <div v-if="discount != 0" class="flex justify-between mb-4">
+                                    <span class="font-bold">Descuento: </span>
+                                    <span v-text="discountFormat"></span>
                                 </div>
                                 <div class="flex justify-between mb-4">
                                     <span class="font-bold">Total: </span><br>
-                                    <span v-text="total"></span>
+                                    <span class="font-bold text-2xl" v-text="totalInvoiceGeneral"></span>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <DataTable :value="productsArray" :class="p-datatable-lg" tableStyle="min-width: 50rem" class="p-10">
-                            <Column field="name" header="Nombre"></Column>
-                            <Column field="code_number" header="Codigo"></Column>
-                            <Column field="price" header="Precio"></Column>
-                            <Column field="quantity" header="Cantidad" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
-                                <template #body="{ data }">
-                                    <TextInput id="quantity" class="block mt-1 w-full" type="number" name="quantity" value="1" required autofocus autocomplete="false"/>
-                                </template>
-                            </Column>
-                            <Column field="total_product" header="Total" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
-                                <template #body="{ data }">
-                                    <span v-text="totalProduct"></span>
-                                </template>
-                            </Column>
-                        </DataTable>
+                        <Column field="name" header="Nombre"></Column>
+                        <Column field="code_number" header="Codigo"></Column>
+                        <Column field="price" header="Precio"></Column>
+                        <Column field="quantity" header="Cantidad" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
+                            <template #body="{ data }">
+                                <TextInput id="quantity" class="block mt-1 w-full" type="number" name="quantity" @change="updateTotal(data,$event)" v-model="data.quantity" required autofocus autocomplete="false"/>
+                            </template>
+                        </Column>
+                        <Column field="total_product" header="Total" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
+                            <template #body="{ data }">
+                                <span v-text="data.total_product"></span>
+                            </template>
+                        </Column>
+                    </DataTable>
                 </div>
             </div>
         </div>

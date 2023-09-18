@@ -63,7 +63,7 @@ const handleEditCustomer = () => {
                         <form @submit.prevent="handleEditCustomer()" method="POST">
 
                             <div class="mt-4">
-                                <InputLabel for="id_card_number" value="Cédula" />
+                                <InputLabel for="id_card_number" value="Cédula/RIF" />
                                 <TextInput id="id_card_number" class="block mt-1 w-full" type="text" name="id_card_number" v-model="formData.id_card_number"  required autofocus />
                             </div>
 

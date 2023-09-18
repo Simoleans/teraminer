@@ -73,6 +73,7 @@ const handleDelete = (id) => {
                     </div>
                     <div class="p-6 text-gray-900">
                         <DataTable :value="props.sellers" tableStyle="min-width: 50rem">
+                            <Column field="id_card_number" header="Cédula/RIF"></Column>
                             <Column field="name" header="Nombre"></Column>
                             <Column field="address" header="Direcciòn"></Column>
                             <Column field="phone" header="Telefono"></Column>

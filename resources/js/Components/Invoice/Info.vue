@@ -11,6 +11,7 @@
                             <span class="bg-[#6A3989] text-md font-bold text-white p-2 rounded-lg">Cliente</span>
                             <div class="p-4 mt-4 border-dashed border-2 border-[#6A3989]">
                                 <p class="flex flex-col justify-center">
+                                    <span class="font-medium text-md" v-text="infoCustomer.id_card_number"></span>
                                     <span class="font-medium text-md" v-text="infoCustomer.name"></span>
                                     <span class="font-medium text-md" v-text="infoCustomer.phone"></span>
                                     <span class="font-medium text-md" v-text="infoCustomer.address"></span>
@@ -22,6 +23,7 @@
                             <span class="bg-[#6A3989] text-md font-bold text-white p-2 rounded-lg">Vendedor</span>
                             <div class="p-4 mt-4 border-dashed border-2 border-[#6A3989]">
                                 <p class="flex flex-col justify-center">
+                                    <span class="font-medium text-md" v-text="infoSeller.id_card_number"></span>
                                     <span class="font-medium text-md" v-text="infoSeller.name"></span>
                                     <span class="font-medium text-md" v-text="infoSeller.phone"></span>
                                     <span class="font-medium text-md" v-text="infoSeller.address"></span>
