@@ -10,6 +10,7 @@ import axios from 'axios';
 import Info from '@/Components/Invoice/Info.vue';
 import Facturacion from '@/Components/Invoice/Facturacion.vue';
 import TablaFacturacion from '@/Components/Invoice/TablaFacturacion.vue';
+import Dropdown from 'primevue/dropdown';
 
 
 const handleInvoiceStore = () => {
@@ -20,6 +21,13 @@ const handleInvoiceStore = () => {
         confirmButtonText: 'Aceptar'
     })
 }
+
+const props = defineProps({
+  shipments: {
+    type: Object,
+    required: true
+  }
+});
 
 const formData = useForm({
     customer_id: '',
@@ -34,13 +42,6 @@ const searchProduct = ref('');
 const customers = ref([]);
 const sellers = ref([]);
 const products = ref('');
-/* const productsArray = ref([]);
-
-
-const totalInvoice = ref('');
-const subTotal = ref('');
-const subTotalFormat = ref('');
-const totalProduct = ref(''); */
 
 const invoice = ref({
     subTotalFormat: '',
@@ -51,13 +52,6 @@ const invoice = ref({
     subTotal: '',
     productsArray: [],
 })
-
-//const discount = ref(0);
-//const discountFormat = ref();
-
-
-
-
 
 
 const infoSeller = ref(
@@ -136,7 +130,6 @@ const addProduct = (product) => {
 
   if (index >= 0) {
     invoice.value.productsArray[index].quantity += 1;
-    //console.log(invoice.value.productsArray[index].quantity,product,product.quantity);
     invoice.value.productsArray[index].total_product = parseInt(invoice.value.productsArray[index].quantity)  * parseInt(product.unit_price);
   } else {
     product.quantity = 1;
@@ -208,8 +201,6 @@ const subTotalGeneral = computed(() => {
             <div class="max-w-7xl w-full md:lg:w-3/5 sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900">Cliente/Vendedor</div>
-                    <!-- <Link class="inline-flex items-center px-4 py-2 m-5 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150" :href="route('dashboard')">Factura</Link> -->
-
                     <div class="grow bg-white overflow-hidden shadow-xl sm:rounded-lg">
                         <div class="p-4 sm:px-20 bg-white border-b border-gray-200">
                             <form @submit.prevent="handleInvoiceStore" method="POST">
@@ -251,6 +242,21 @@ const subTotalGeneral = computed(() => {
                 </div>
             </div>
             <Info :infoSeller="infoSeller" :infoCustomer="infoCustomer"/>
+            <div class="max-w-7xl w-full md:lg:w-3/5 sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-4 text-gray-900">Envío</div>
+                    <div class="grow bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                        <div class="p-4 sm:px-20 bg-white border-b border-gray-200">
+                                <div class="grid grid-cols-1 gap-4">
+                                    <div>
+                                        <InputLabel for="shipment_id" value="Envio" />
+                                        <Dropdown v-model="formData.type" :options="props.shipments" optionLabel="name" placeholder="Selecciona Tipo" class="w-full md:w-14rem" />
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="py-4 p-4 w-full flex flex-col md:flex-row gap-2 ">

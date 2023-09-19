@@ -10,6 +10,10 @@ use App\Http\Controllers\SellerController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ShipmentController;
+
+//models
+use App\Models\Shipment;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +34,10 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('Dashboard',
+        [
+            'shipments' => Shipment::all(),
+        ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -50,6 +57,9 @@ Route::middleware('auth')->group(function () {
 
     //products
     Route::resource('/products', ProductController::class);
+
+    //shipment
+    Route::resource('/shipments',ShipmentController::class);
 
     //invoice
 
