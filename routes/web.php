@@ -13,7 +13,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ShipmentController;
 
 //models
-use App\Models\{Customer, Seller, Shipment};
+use App\Models\{Customer, Seller, Shipment,Product};
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +39,7 @@ Route::get('/dashboard', function () {
             'shipments' => Shipment::all(),
             'customers' => Customer::all(),
             'sellers' => Seller::all(),
+            'products' => Product::all(),
         ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

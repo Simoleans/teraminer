@@ -37,6 +37,10 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    products: {
+        type: Object,
+        required: true
+    },
 });
 
 const formData = useForm({
@@ -198,7 +202,7 @@ const subTotalGeneral = computed(() => {
     return '$'+total;
 });
 
-const handleModalCustomer = (type) => {
+const handleModal = (type) => {
 
     modalShow.value = true;
     titleModal.value = type;
@@ -228,7 +232,7 @@ const handleModalCustomer = (type) => {
                                     <div>
                                         <InputLabel for="customer_id" value="Cliente" />
                                         <TextInput id="customer_id" class="block mt-1 w-full" type="text" name="customer_id" v-model="searchTermCustomer"  required autofocus autocomplete="false"/>
-                                        <a @click="handleModalCustomer('Clientes')" href="#" class="block mt-1 w-full text-blue-500 text-sm">Ver Clientes</a>
+                                        <span @click="handleModal('Clientes')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Clientes</span>
                                         <div class="flex flex-col">
                                             <ul v-if="customers.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
                                                 <li v-for="customer in customers" :key="customer.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectCustomer(customer)">{{ customer.name }} - {{ customer.id_card_number}}</li>
@@ -239,6 +243,7 @@ const handleModalCustomer = (type) => {
                                     <div>
                                         <InputLabel for="seller_id" value="Vendedor" />
                                         <TextInput id="seller_id" class="block mt-1 w-full" type="text" name="seller_id" v-model="searchTermSeller"  required autocomplete="false"/>
+                                        <span @click="handleModal('Vendedores')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Vendedores</span>
                                         <div class="flex flex-col">
                                             <ul v-if="sellers.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
                                                 <li v-for="seller in sellers" :key="seller.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectSeller(seller)">{{ seller.name }} - {{ seller.id_card_number }}</li>
@@ -263,6 +268,7 @@ const handleModalCustomer = (type) => {
                                     <div>
                                         <InputLabel for="shipment_id" value="Envio" />
                                         <Dropdown v-model="formData.type" :options="props.shipments" optionLabel="name" placeholder="Selecciona Tipo" class="w-full md:w-14rem" />
+                                        <span @click="handleModal('Envios')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Envios</span>
                                     </div>
                                 </div>
                         </div>
@@ -280,6 +286,7 @@ const handleModalCustomer = (type) => {
                         <div class="p-10 grow">
                             <InputLabel for="product" value="Producto" />
                             <TextInput id="product" class="block mt-1 w-full" type="text" name="product" v-model="searchProduct"  required autocomplete="false"/>
+                            <a @click="handleModal('Productos')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Productos</a>
                             <div class="flex flex-col">
                                 <ul v-if="products.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
                                     <li v-for="product in products" :key="product.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="addProduct(product)">{{ product.name }} - {{ product.code_number}}</li>
@@ -303,6 +310,8 @@ const handleModalCustomer = (type) => {
             :title="titleModal"
             :customers="props.customers"
             :sellers="props.sellers"
+            :products="props.products"
+            :shipments="props.shipments"
         />
     </AuthenticatedLayout>
 </template>
