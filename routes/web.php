@@ -13,7 +13,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ShipmentController;
 
 //models
-use App\Models\Shipment;
+use App\Models\{Customer, Seller, Shipment};
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +37,8 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard',
         [
             'shipments' => Shipment::all(),
+            'customers' => Customer::all(),
+            'sellers' => Seller::all(),
         ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

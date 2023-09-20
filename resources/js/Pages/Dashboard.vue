@@ -10,7 +10,9 @@ import axios from 'axios';
 import Info from '@/Components/Invoice/Info.vue';
 import Facturacion from '@/Components/Invoice/Facturacion.vue';
 import TablaFacturacion from '@/Components/Invoice/TablaFacturacion.vue';
+import ModalShow from '@/Components/Invoice/ModalShow.vue';
 import Dropdown from 'primevue/dropdown';
+
 
 
 const handleInvoiceStore = () => {
@@ -23,10 +25,18 @@ const handleInvoiceStore = () => {
 }
 
 const props = defineProps({
-  shipments: {
-    type: Object,
-    required: true
-  }
+    shipments: {
+        type: Object,
+        required: true
+    },
+    customers: {
+        type: Object,
+        required: true
+    },
+    sellers: {
+        type: Object,
+        required: true
+    },
 });
 
 const formData = useForm({
@@ -42,6 +52,9 @@ const searchProduct = ref('');
 const customers = ref([]);
 const sellers = ref([]);
 const products = ref('');
+
+const modalShow = ref(false);
+const titleModal = ref('');
 
 const invoice = ref({
     subTotalFormat: '',
@@ -185,6 +198,13 @@ const subTotalGeneral = computed(() => {
     return '$'+total;
 });
 
+const handleModalCustomer = (type) => {
+
+    modalShow.value = true;
+    titleModal.value = type;
+    //console.log(titleModal.value);
+}
+
 
 </script>
 
@@ -198,7 +218,7 @@ const subTotalGeneral = computed(() => {
 
         <div class="py-4 p-4 flex flex-col md:flex-row gap-2 ">
             <!-- info customer and seller -->
-            <div class="max-w-7xl w-full md:lg:w-3/5 sm:px-6 lg:px-8">
+            <div class="max-w-7xl w-full md:lg:w-3/5  lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900">Cliente/Vendedor</div>
                     <div class="grow bg-white overflow-hidden shadow-xl sm:rounded-lg">
@@ -208,7 +228,7 @@ const subTotalGeneral = computed(() => {
                                     <div>
                                         <InputLabel for="customer_id" value="Cliente" />
                                         <TextInput id="customer_id" class="block mt-1 w-full" type="text" name="customer_id" v-model="searchTermCustomer"  required autofocus autocomplete="false"/>
-                                        <InputError class="mt-2" :message="formData.errors.customer_id" />
+                                        <a @click="handleModalCustomer('Clientes')" href="#" class="block mt-1 w-full text-blue-500 text-sm">Ver Clientes</a>
                                         <div class="flex flex-col">
                                             <ul v-if="customers.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
                                                 <li v-for="customer in customers" :key="customer.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectCustomer(customer)">{{ customer.name }} - {{ customer.id_card_number}}</li>
@@ -219,7 +239,6 @@ const subTotalGeneral = computed(() => {
                                     <div>
                                         <InputLabel for="seller_id" value="Vendedor" />
                                         <TextInput id="seller_id" class="block mt-1 w-full" type="text" name="seller_id" v-model="searchTermSeller"  required autocomplete="false"/>
-                                        <InputError class="mt-2" :message="formData.errors.seller_id" />
                                         <div class="flex flex-col">
                                             <ul v-if="sellers.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
                                                 <li v-for="seller in sellers" :key="seller.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectSeller(seller)">{{ seller.name }} - {{ seller.id_card_number }}</li>
@@ -228,14 +247,7 @@ const subTotalGeneral = computed(() => {
 
                                     </div>
                                 </div>
-                                <!-- <div class="flex items-center justify-end mt-4">
-                                    <Link :href="route('products.index')" class="ml-4">
-                                        Volver
-                                    </Link>
-                                    <PrimaryButton class="ml-4">
-                                        Crear
-                                    </PrimaryButton>
-                                </div> -->
+
                             </form>
                         </div>
                     </div>
@@ -284,5 +296,13 @@ const subTotalGeneral = computed(() => {
                 </div>
             </div>
         </div>
+
+        <ModalShow
+            :modalShow="modalShow"
+            @close="modalShow = false"
+            :title="titleModal"
+            :customers="props.customers"
+            :sellers="props.sellers"
+        />
     </AuthenticatedLayout>
 </template>
