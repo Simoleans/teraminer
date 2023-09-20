@@ -202,7 +202,7 @@ const subTotalGeneral = computed(() => {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900">Cliente/Vendedor</div>
                     <div class="grow bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                        <div class="p-4 sm:px-20 bg-white border-b border-gray-200">
+                        <div class="p-4 sm:px-8 bg-white border-b border-gray-200">
                             <form @submit.prevent="handleInvoiceStore" method="POST">
                                 <div class="grid grid-cols-1 gap-4">
                                     <div>
@@ -246,7 +246,7 @@ const subTotalGeneral = computed(() => {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900">Envío</div>
                     <div class="grow bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                        <div class="p-4 sm:px-20 bg-white border-b border-gray-200">
+                        <div class="p-4 sm:px-8 bg-white border-b border-gray-200">
                                 <div class="grid grid-cols-1 gap-4">
                                     <div>
                                         <InputLabel for="shipment_id" value="Envio" />
