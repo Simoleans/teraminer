@@ -4,7 +4,7 @@
                 <h2 class="text-2xl font-bold mb-4">Factura</h2>
                 <div class="flex justify-between mb-4">
                     <span class="font-bold">Sub: </span>
-                    <span v-text="invoice.subTotalGeneral"></span>
+                    <span v-text="invoice.subTotalFormat"></span>
                 </div>
                 <div v-if="invoice.discount != 0" class="flex justify-between mb-4">
                     <span class="font-bold">Descuento: </span>

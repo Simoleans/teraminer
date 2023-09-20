@@ -156,6 +156,8 @@ const addProduct = (product) => {
 
   searchProduct.value = '';
   products.value = [];
+
+  console.log(invoice);
   suma();
 };
 
@@ -231,24 +233,38 @@ const handleModal = (type) => {
                                 <div class="grid grid-cols-1 gap-4">
                                     <div>
                                         <InputLabel for="customer_id" value="Cliente" />
-                                        <TextInput id="customer_id" class="block mt-1 w-full" type="text" name="customer_id" v-model="searchTermCustomer"  required autofocus autocomplete="false"/>
+                                        <Dropdown editable v-model="formData.customer_id" :options="props.customers" optionLabel="name" placeholder="Selecciona Cliente" class="w-full md:w-14rem" >
+                                            <template #option="slotProps">
+                                                <div class="flex align-items-center" @click="selectCustomer(slotProps.option)">
+                                                    <div>{{ slotProps.option.name }} - {{ slotProps.option.id_card_number}}</div>
+                                                </div>
+                                            </template>
+                                        </Dropdown>
+                                        <!-- <TextInput id="customer_id" class="block mt-1 w-full" type="text" name="customer_id" v-model="searchTermCustomer"  required autofocus autocomplete="false"/>
                                         <span @click="handleModal('Clientes')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Clientes</span>
                                         <div class="flex flex-col">
                                             <ul v-if="customers.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
                                                 <li v-for="customer in customers" :key="customer.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectCustomer(customer)">{{ customer.name }} - {{ customer.id_card_number}}</li>
                                             </ul>
-                                        </div>
+                                        </div> -->
 
                                     </div>
                                     <div>
                                         <InputLabel for="seller_id" value="Vendedor" />
-                                        <TextInput id="seller_id" class="block mt-1 w-full" type="text" name="seller_id" v-model="searchTermSeller"  required autocomplete="false"/>
+                                        <Dropdown editable v-model="formData.seller_id" :options="props.sellers" optionLabel="name" placeholder="Selecciona Vendedor" class="w-full md:w-14rem">
+                                            <template #option="slotProps">
+                                                <div class="flex align-items-center" @click="selectSeller(slotProps.option)">
+                                                    <div>{{ slotProps.option.name }} - {{ slotProps.option.id_card_number}}</div>
+                                                </div>
+                                            </template>
+                                        </Dropdown>
+                                        <!-- <TextInput id="seller_id" class="block mt-1 w-full" type="text" name="seller_id" v-model="searchTermSeller"  required autocomplete="false"/>
                                         <span @click="handleModal('Vendedores')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Vendedores</span>
                                         <div class="flex flex-col">
                                             <ul v-if="sellers.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
                                                 <li v-for="seller in sellers" :key="seller.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectSeller(seller)">{{ seller.name }} - {{ seller.id_card_number }}</li>
                                             </ul>
-                                        </div>
+                                        </div> -->
 
                                     </div>
                                 </div>
@@ -267,8 +283,8 @@ const handleModal = (type) => {
                                 <div class="grid grid-cols-1 gap-4">
                                     <div>
                                         <InputLabel for="shipment_id" value="Envio" />
-                                        <Dropdown v-model="formData.type" :options="props.shipments" optionLabel="name" placeholder="Selecciona Tipo" class="w-full md:w-14rem" />
-                                        <span @click="handleModal('Envios')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Envios</span>
+                                        <Dropdown editable v-model="formData.type" :options="props.shipments" optionLabel="name" placeholder="Selecciona Tipo" class="w-full md:w-14rem" />
+                                        <!-- <span @click="handleModal('Envios')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Envios</span> -->
                                     </div>
                                 </div>
                         </div>
@@ -285,19 +301,31 @@ const handleModal = (type) => {
                     <div class="flex  md:lg:flex-row justify-between flex-col-reverse">
                         <div class="p-10 grow">
                             <InputLabel for="product" value="Producto" />
-                            <TextInput id="product" class="block mt-1 w-full" type="text" name="product" v-model="searchProduct"  required autocomplete="false"/>
+                            <Dropdown editable v-model="formData.product_id" :options="props.products" optionLabel="name" placeholder="Selecciona Producto" class="w-full md:w-14rem" >
+                                <template #option="slotProps">
+                                    <div class="flex align-items-center" @click="addProduct(slotProps.option)">
+                                        <div>{{ slotProps.option.code_number }} - {{ slotProps.option.name}}</div>
+                                    </div>
+                                </template>
+                            </Dropdown>
+                            <!-- <TextInput id="product" class="block mt-1 w-full" type="text" name="product" v-model="searchProduct"  required autocomplete="false"/>
                             <a @click="handleModal('Productos')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Productos</a>
                             <div class="flex flex-col">
                                 <ul v-if="products.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
                                     <li v-for="product in products" :key="product.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="addProduct(product)">{{ product.name }} - {{ product.code_number}}</li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="p-10">
                             <InputLabel for="discount" value="Descuento (%)" />
                             <TextInput id="discount" class="block mt-1 w-full" type="text" name="discount" v-model="invoice.discount"  required autocomplete="false"/>
                         </div>
-                        <Facturacion :subTotalGeneral="subTotalGeneral" :totalInvoiceGeneral="totalInvoiceGeneral" :discount="discount" :invoice="invoice" />
+                        <Facturacion
+                            :subTotalGeneral="subTotalGeneral"
+                            :totalInvoiceGeneral="totalInvoiceGeneral"
+                            :discount="discount"
+                            :invoice="invoice"
+                        />
                     </div>
                     <TablaFacturacion :productsArray="invoice.productsArray" :invoice="invoice" />
                 </div>
