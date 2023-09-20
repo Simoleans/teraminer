@@ -12,17 +12,10 @@ import Facturacion from '@/Components/Invoice/Facturacion.vue';
 import TablaFacturacion from '@/Components/Invoice/TablaFacturacion.vue';
 import ModalShow from '@/Components/Invoice/ModalShow.vue';
 import Dropdown from 'primevue/dropdown';
+import Swal from 'sweetalert2'
 
 
 
-const handleInvoiceStore = () => {
-    Swal.fire({
-        title: 'Creado',
-        text: 'Se ha creado la factura',
-        icon: 'success',
-        confirmButtonText: 'Aceptar'
-    })
-}
 
 const props = defineProps({
     shipments: {
@@ -43,11 +36,7 @@ const props = defineProps({
     },
 });
 
-const formData = useForm({
-    customer_id: '',
-    name : '',
-    unit_price: '',
-});
+
 
 const searchTermSeller = ref('');
 const searchTermCustomer = ref('');
@@ -68,7 +57,12 @@ const invoice = ref({
     discount: '',
     subTotal: '',
     productsArray: [],
-})
+    shipment_id: '',
+    customer_id: '',
+    seller_id: '',
+});
+
+const formData = useForm({...invoice.value});
 
 
 const infoSeller = ref(
@@ -88,6 +82,47 @@ const infoCustomer = ref(
     email: '',
 
 });
+
+
+const handleInvoiceStore = () => {
+    /* Swal.fire({
+        title: 'Creado',
+        text: 'Se ha creado la factura',
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+    }) */
+
+    //handle save use axios route invoices.store and invoice.value
+    //console.log(invoice.value);
+
+    /* axios.post(route("invoices.store"), {...invoice.value, ...formData.value})
+    .then(function (response) {
+        messageTest.value = response.data;
+        Swal.fire({
+            title: 'Creado',
+            text: 'Se ha creado la factura',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        })
+    })
+    .catch(function (error) {
+        console.log(error);
+    }); */
+    formData.post(route("invoices.store"), {
+        onStart: () => console.log("start"),
+        onFinish: () => console.log("finish"),
+        onError: (error) => console.log(error),
+        onSuccess: () => {
+            Swal.fire({
+                title: 'Creado',
+                text: 'Se ha creado el vendedor',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            })
+        }
+    });
+}
+
 
 
 watch(searchProduct, (newTerm) => {
@@ -143,43 +178,40 @@ const selectSeller = (seller) => {
 
 //productos
 const addProduct = (product) => {
-  const index = invoice.value.productsArray.findIndex((p) => p.name === product.name);
+  const index = formData.productsArray.findIndex((p) => p.name === product.name);
 
   if (index >= 0) {
-    invoice.value.productsArray[index].quantity += 1;
-    invoice.value.productsArray[index].total_product = parseInt(invoice.value.productsArray[index].quantity)  * parseInt(product.unit_price);
+    formData.productsArray[index].quantity += 1;
+    formData.productsArray[index].total_product = parseInt(formData.productsArray[index].quantity)  * parseInt(product.unit_price);
   } else {
     product.quantity = 1;
     product.total_product = parseInt(product.unit_price);
-    invoice.value.productsArray.push(product);
+    formData.productsArray.push(product);
   }
 
   searchProduct.value = '';
   products.value = [];
 
-  console.log(invoice);
   suma();
 };
 
 const suma = () => {
     let total = parseInt(0);
     let sub = parseInt(0);
-    invoice.value.productsArray.forEach((product) => {
-        total += product.total_product - (product.total_product *  invoice.value.discount / 100);
+    formData.productsArray.forEach((product) => {
+        total += product.total_product - (product.total_product *  formData.discount / 100);
         sub += product.total_product;
 
     });
 
-    invoice.value.totalInvoice = total;
-    invoice.value.subTotal = sub;
-    invoice.value.subTotalFormat = '$'+sub;
-    invoice.value.discountFormat = '- $'+sub * invoice.value.discount / 100;
-
-
+    formData.totalInvoice = total;
+    formData.subTotal = sub;
+    formData.subTotalFormat = '$'+sub;
+    invoice.value.discountFormat = '- $'+sub * formData.discount / 100;
 };
 
 //watch discount
-watch(invoice.value, (newTerm) => {
+watch(formData, (newTerm) => {
     suma();
 });
 
@@ -187,8 +219,8 @@ watch(invoice.value, (newTerm) => {
 //computed total
 const totalInvoiceGeneral = computed(() => {
     let total = parseInt(0);
-    invoice.value.productsArray.forEach((product) => {
-        total += product.total_product - (product.total_product * invoice.value.discount / 100);
+    formData.productsArray.forEach((product) => {
+        total += product.total_product - (product.total_product * formData.discount / 100);
     });
 
     return '$'+total;
@@ -197,7 +229,7 @@ const totalInvoiceGeneral = computed(() => {
 //computed subtotal
 const subTotalGeneral = computed(() => {
     let total = parseInt(0);
-    invoice.value.productsArray.forEach((product) => {
+    formData.productsArray.forEach((product) => {
         total += product.total_product;
     });
 
@@ -229,17 +261,18 @@ const handleModal = (type) => {
                     <div class="p-4 text-gray-900">Cliente/Vendedor</div>
                     <div class="grow bg-white overflow-hidden shadow-xl sm:rounded-lg">
                         <div class="p-4 sm:px-8 bg-white border-b border-gray-200">
-                            <form @submit.prevent="handleInvoiceStore" method="POST">
+                            <!-- <form @submit.prevent="handleInvoiceStore" method="POST"> -->
                                 <div class="grid grid-cols-1 gap-4">
                                     <div>
                                         <InputLabel for="customer_id" value="Cliente" />
-                                        <Dropdown editable v-model="formData.customer_id" :options="props.customers" optionLabel="name" placeholder="Selecciona Cliente" class="w-full md:w-14rem" >
+                                        <Dropdown editable v-model="formData.customer_id" :options="props.customers" optionLabel="name" optionValue="id" placeholder="Selecciona Cliente" class="w-full md:w-14rem" >
                                             <template #option="slotProps">
                                                 <div class="flex align-items-center" @click="selectCustomer(slotProps.option)">
                                                     <div>{{ slotProps.option.name }} - {{ slotProps.option.id_card_number}}</div>
                                                 </div>
                                             </template>
                                         </Dropdown>
+                                        <InputError class="mt-2" :message="formData.errors.customer_id" />
                                         <!-- <TextInput id="customer_id" class="block mt-1 w-full" type="text" name="customer_id" v-model="searchTermCustomer"  required autofocus autocomplete="false"/>
                                         <span @click="handleModal('Clientes')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Clientes</span>
                                         <div class="flex flex-col">
@@ -251,13 +284,14 @@ const handleModal = (type) => {
                                     </div>
                                     <div>
                                         <InputLabel for="seller_id" value="Vendedor" />
-                                        <Dropdown editable v-model="formData.seller_id" :options="props.sellers" optionLabel="name" placeholder="Selecciona Vendedor" class="w-full md:w-14rem">
+                                        <Dropdown editable v-model="formData.seller_id" :options="props.sellers" optionLabel="name" optionValue="id" placeholder="Selecciona Vendedor" class="w-full md:w-14rem">
                                             <template #option="slotProps">
                                                 <div class="flex align-items-center" @click="selectSeller(slotProps.option)">
                                                     <div>{{ slotProps.option.name }} - {{ slotProps.option.id_card_number}}</div>
                                                 </div>
                                             </template>
                                         </Dropdown>
+                                        <InputError class="mt-2" :message="formData.errors.seller_id" />
                                         <!-- <TextInput id="seller_id" class="block mt-1 w-full" type="text" name="seller_id" v-model="searchTermSeller"  required autocomplete="false"/>
                                         <span @click="handleModal('Vendedores')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Vendedores</span>
                                         <div class="flex flex-col">
@@ -269,7 +303,7 @@ const handleModal = (type) => {
                                     </div>
                                 </div>
 
-                            </form>
+                            <!-- </form> -->
                         </div>
                     </div>
                 </div>
@@ -283,7 +317,8 @@ const handleModal = (type) => {
                                 <div class="grid grid-cols-1 gap-4">
                                     <div>
                                         <InputLabel for="shipment_id" value="Envio" />
-                                        <Dropdown editable v-model="formData.type" :options="props.shipments" optionLabel="name" placeholder="Selecciona Tipo" class="w-full md:w-14rem" />
+                                        <Dropdown editable v-model="formData.shipment_id" :options="props.shipments" optionLabel="name" optionValue="id" placeholder="Selecciona Tipo" class="w-full md:w-14rem" />
+                                        <InputError class="mt-2" :message="formData.errors.shipment_id" />
                                         <!-- <span @click="handleModal('Envios')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Envios</span> -->
                                     </div>
                                 </div>
@@ -301,13 +336,14 @@ const handleModal = (type) => {
                     <div class="flex  md:lg:flex-row justify-between flex-col-reverse">
                         <div class="p-10 grow">
                             <InputLabel for="product" value="Producto" />
-                            <Dropdown editable v-model="formData.product_id" :options="props.products" optionLabel="name" placeholder="Selecciona Producto" class="w-full md:w-14rem" >
-                                <template #option="slotProps">
+                            <Dropdown editable v-model="formData.product_id" :options="props.products" optionLabel="name" placeholder="Selecciona Producto" class="w-full md:w-14rem" />
+                            <InputError class="mt-2" :message="formData.errors.products" />
+                                <!-- <template #option="slotProps">
                                     <div class="flex align-items-center" @click="addProduct(slotProps.option)">
                                         <div>{{ slotProps.option.code_number }} - {{ slotProps.option.name}}</div>
                                     </div>
                                 </template>
-                            </Dropdown>
+                            </Dropdown> -->
                             <!-- <TextInput id="product" class="block mt-1 w-full" type="text" name="product" v-model="searchProduct"  required autocomplete="false"/>
                             <a @click="handleModal('Productos')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Productos</a>
                             <div class="flex flex-col">
@@ -318,16 +354,27 @@ const handleModal = (type) => {
                         </div>
                         <div class="p-10">
                             <InputLabel for="discount" value="Descuento (%)" />
-                            <TextInput id="discount" class="block mt-1 w-full" type="text" name="discount" v-model="invoice.discount"  required autocomplete="false"/>
+                            <TextInput id="discount" class="block mt-1 w-full" type="text" name="discount" v-model="formData.discount"  required autocomplete="false"/>
                         </div>
                         <Facturacion
                             :subTotalGeneral="subTotalGeneral"
                             :totalInvoiceGeneral="totalInvoiceGeneral"
                             :discount="discount"
                             :invoice="invoice"
+                            :formData="formData"
                         />
+
                     </div>
-                    <TablaFacturacion :productsArray="invoice.productsArray" :invoice="invoice" />
+
+                    <TablaFacturacion
+                        :productsArray="formData.productsArray"
+                        :invoice="invoice"
+                    />
+
+                    <!-- button save -->
+                    <div class="flex justify-end p-5">
+                        <PrimaryButton class="mt-4" @click="handleInvoiceStore" >Guardar</PrimaryButton>
+                    </div>
                 </div>
             </div>
         </div>

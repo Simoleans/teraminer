@@ -25,8 +25,8 @@
 <script setup>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+/* import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue'; */
 import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps({
@@ -46,22 +46,22 @@ const updateTotal = (data,event) => {
     }
     props.invoice.totalProduct = event.target.value * data.unit_price;
     data.total_product = event.target.value * data.unit_price;
-    suma()
+    //suma()
 }
 
 const suma = () => {
     let total = parseInt(0);
     let sub = parseInt(0);
-    invoice.value.productsArray.forEach((product) => {
-        total += product.total_product - (product.total_product * discount.value / 100);
+    invoice.productsArray.forEach((product) => {
+        total += product.total_product - (product.total_product * discount / 100);
         sub += product.total_product;
 
     });
 
-    invoice.value.totalInvoice = total;
-    invoice.value.subTotal = sub;
-    invoice.value.subTotalFormat = '$'+sub;
-    discountFormat.value = '- $'+sub * discount.value / 100;
+    invoice.totalInvoice = total;
+    invoice.subTotal = sub;
+    invoice.subTotalFormat = '$'+sub;
+    discountFormat = '- $'+sub * discount / 100;
 
 };
 

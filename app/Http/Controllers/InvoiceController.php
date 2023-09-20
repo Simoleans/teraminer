@@ -29,7 +29,36 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        /* dd($request->all());
+        $response = [
+            'total' => $request->totalInvoice,
+            'discount' => $request->discount,
+            'subtotal' => $request->subTotal,
+            'products' => $request->productsArray,
+            'shipment_id' => $request->shipping_id ?? null,
+            'customer_id' => $request->customer_id,
+            'seller_id' => $request->seller_id,
+        ]; */
+
+        //validation return response json message
+        $request->validate([
+            //'total' => 'required',
+            //'subTotal' => 'required',
+            'products' => 'required',
+            'customer_id' => 'required',
+            'seller_id' => 'required',
+            'shipment_id' => 'required',
+        ],
+        [
+            'customer_id.required' => 'El cliente es requerido.',
+            'seller_id.required' => 'El vendedor es requerido.',
+            'shipment_id.required' => 'El tipo de envio es requerido.',
+            'products.required' => 'Los productos son requeridos.',
+        ]);
+
+        //create invoice
+        //$invoice = Invoice::create($response);
+        return response()->json($request->all());
     }
 
     /**

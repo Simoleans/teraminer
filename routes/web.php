@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/shipments',ShipmentController::class);
 
     //invoice
+    Route::resource('/invoices', InvoiceController::class);
 
     Route::get('/search-customer', [InvoiceController::class, 'searchCustomer']);
     Route::get('/search-seller', [InvoiceController::class, 'searchSeller']);
