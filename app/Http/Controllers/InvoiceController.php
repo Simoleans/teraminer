@@ -29,7 +29,7 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
 
 
         //validation return response json message
