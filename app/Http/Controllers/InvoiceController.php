@@ -29,6 +29,7 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
         /* dd($request->all());
         $response = [
             'total' => $request->totalInvoice,
@@ -44,7 +45,7 @@ class InvoiceController extends Controller
         $request->validate([
             //'total' => 'required',
             //'subTotal' => 'required',
-            'products' => 'required',
+            'productsArray' => 'required',
             'customer_id' => 'required',
             'seller_id' => 'required',
             'shipment_id' => 'required',
@@ -55,6 +56,8 @@ class InvoiceController extends Controller
             'shipment_id.required' => 'El tipo de envio es requerido.',
             'products.required' => 'Los productos son requeridos.',
         ]);
+
+        dd("Yo no te dije que probaras esto? plasta de mierda");
 
         //create invoice
         //$invoice = Invoice::create($response);
