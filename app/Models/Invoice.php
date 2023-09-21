@@ -19,6 +19,11 @@ class Invoice extends Model
         'total',
     ];
 
+    public function setProductsAttribute($value)
+    {
+        $this->attributes['products'] = json_encode($value);
+    }
+
     public function product()
     {
         return $this->belongsTo(Product::class);

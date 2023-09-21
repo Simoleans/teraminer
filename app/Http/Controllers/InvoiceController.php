@@ -29,23 +29,14 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
-        /* dd($request->all());
-        $response = [
-            'total' => $request->totalInvoice,
-            'discount' => $request->discount,
-            'subtotal' => $request->subTotal,
-            'products' => $request->productsArray,
-            'shipment_id' => $request->shipping_id ?? null,
-            'customer_id' => $request->customer_id,
-            'seller_id' => $request->seller_id,
-        ]; */
+        dd($request->all());
+
 
         //validation return response json message
         $request->validate([
             //'total' => 'required',
             //'subTotal' => 'required',
-            'productsArray' => 'required',
+            'productsArray' => 'required|array|min:1',
             'customer_id' => 'required',
             'seller_id' => 'required',
             'shipment_id' => 'required',
@@ -54,14 +45,27 @@ class InvoiceController extends Controller
             'customer_id.required' => 'El cliente es requerido.',
             'seller_id.required' => 'El vendedor es requerido.',
             'shipment_id.required' => 'El tipo de envio es requerido.',
-            'products.required' => 'Los productos son requeridos.',
+            'productsArray.required' => 'Los productos son requeridos.',
+            'productsArray.array' => 'El campo Productos debe ser un array.',
+            'productsArray.min' => 'El campo productsArray debe tener al menos un elemento.',
         ]);
 
-        dd("Yo no te dije que probaras esto? plasta de mierda");
+        $response = [
+            'total' => $request->totalInvoice,
+            'discount' => $request->discount,
+            'subtotal' => $request->subTotal,
+            'products' => $request->productsArray,
+            'shipment_id' => $request->shipping_id ?? null,
+            'customer_id' => $request->customer_id,
+            'seller_id' => $request->seller_id,
+        ];
+
+        //dd("Yo no te dije que probaras esto? plasta de mierda",$request->all());
 
         //create invoice
-        //$invoice = Invoice::create($response);
-        return response()->json($request->all());
+        $invoice = Invoice::create($response);
+
+        return redirect()->route('dashboard');
     }
 
     /**

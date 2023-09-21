@@ -337,13 +337,14 @@ const handleModal = (type) => {
                         <div class="p-10 grow">
                             <InputLabel for="product" value="Producto" />
                             <Dropdown editable v-model="formData.product_id" :options="props.products" optionLabel="name" optionValue="id" placeholder="Selecciona Producto" class="w-full md:w-14rem">
-                            <InputError class="mt-2" :message="formData.errors.products" />
+
                                 <template #option="slotProps">
                                     <div class="flex align-items-center" @click="addProduct(slotProps.option)">
                                         <div>{{ slotProps.option.name}}</div>
                                     </div>
                                 </template>
                             </Dropdown>
+                            <InputError class="mt-2" :message="formData.errors.productsArray" />
                             <!-- <TextInput id="product" class="block mt-1 w-full" type="text" name="product" v-model="searchProduct"  required autocomplete="false"/>
                             <a @click="handleModal('Productos')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Productos</a>
                             <div class="flex flex-col">
