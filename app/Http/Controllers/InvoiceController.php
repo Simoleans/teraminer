@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InvoiceStoreRequest;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
-use App\Models\{Customer,Seller,Product};
+use App\Models\{Customer,Seller,Product,Shipment};
 use Inertia\Inertia;
 
 class InvoiceController extends Controller
@@ -33,8 +33,6 @@ class InvoiceController extends Controller
      */
     public function store(InvoiceStoreRequest $request)
     {
-        //dd($request->all(),json_encode($request->productsArray));
-
 
         $response = [
             'total' => $request->totalInvoice,
@@ -66,7 +64,13 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
-        //
+        return Inertia::render('Invoices/Edit', [
+            'invoice' => $invoice,
+            'shipments' => Shipment::all(),
+            'customers' => Customer::all(),
+            'sellers' => Seller::all(),
+            'products' => Product::all(),
+        ]);
     }
 
     /**
