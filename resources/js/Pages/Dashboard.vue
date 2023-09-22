@@ -6,15 +6,11 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { ref, watch,computed } from 'vue';
-import axios from 'axios';
 import Info from '@/Components/Invoice/Info.vue';
 import Facturacion from '@/Components/Invoice/Facturacion.vue';
 import TablaFacturacion from '@/Components/Invoice/TablaFacturacion.vue';
-//import ModalShow from '@/Components/Invoice/ModalShow.vue';
 import Dropdown from 'primevue/dropdown';
 import Swal from 'sweetalert2'
-
-
 
 
 const props = defineProps({
@@ -36,15 +32,8 @@ const props = defineProps({
     },
     correlative: {
         type: String,
-        //required: true
     }
 });
-
-
-/*
-const searchTermSeller = ref('');
-const searchTermCustomer = ref('');
-const searchProduct = ref(''); */
 
 const customers = ref([]);
 const sellers = ref([]);
@@ -109,47 +98,9 @@ const handleInvoiceStore = () => {
     });
 }
 
-
-/*
-watch(searchProduct, (newTerm) => {
-    customers.value = [];
-    if (newTerm.length < 3) return;
-    axios.get('/search-product', { params: { term: newTerm } })
-        .then(response => {
-            products.value = response.data;
-        })
-        .catch(error => {
-            console.log(error);
-        });
-});
-
-watch(searchTermCustomer, (newTerm) => {
-    customers.value = [];
-    if (newTerm.length < 3) return;
-    axios.get('/search-customer', { params: { term: newTerm } })
-        .then(response => {
-            customers.value = response.data;
-        })
-        .catch(error => {
-            console.log(error);
-        });
-});
-
-watch(searchTermSeller, (newTerm) => {
-    sellers.value = [];
-    if (newTerm.length < 3) return;
-    axios.get('/search-seller', { params: { term: newTerm } })
-        .then(response => {
-            sellers.value = response.data;
-        })
-        .catch(error => {
-            console.log(error);
-        });
-}); */
-
 const selectCustomer = (customer) => {
   formData.customer_id = customer.id;
-  searchTermCustomer.value = '';
+
   customers.value = [];
   infoCustomer.value = { ...customer };
 
@@ -157,7 +108,7 @@ const selectCustomer = (customer) => {
 
 const selectSeller = (seller) => {
   formData.seller_id = seller.id;
-  searchTermSeller.value = '';
+
   sellers.value = [];
   infoSeller.value = { ...seller };
 };
@@ -175,9 +126,8 @@ const addProduct = (product) => {
     formData.productsArray.push(product);
   }
 
-  searchProduct.value = '';
+
   products.value = [];
-  console.log(formData.productsArray);
   suma();
 };
 
@@ -226,7 +176,6 @@ const handleModal = (type) => {
 
     modalShow.value = true;
     titleModal.value = type;
-    //console.log(titleModal.value);
 }
 
 
@@ -251,7 +200,6 @@ const handleModal = (type) => {
                     <div class="p-4 text-gray-900">Cliente/Vendedor</div>
                     <div class="grow bg-white overflow-hidden shadow-xl sm:rounded-lg">
                         <div class="p-4 sm:px-8 bg-white border-b border-gray-200">
-                            <!-- <form @submit.prevent="handleInvoiceStore" method="POST"> -->
                                 <div class="grid grid-cols-1 gap-4">
                                     <div>
                                         <InputLabel for="customer_id" value="Cliente" />
@@ -263,14 +211,6 @@ const handleModal = (type) => {
                                             </template>
                                         </Dropdown>
                                         <InputError class="mt-2" :message="formData.errors.customer_id" />
-                                        <!-- <TextInput id="customer_id" class="block mt-1 w-full" type="text" name="customer_id" v-model="searchTermCustomer"  required autofocus autocomplete="false"/>
-                                        <span @click="handleModal('Clientes')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Clientes</span>
-                                        <div class="flex flex-col">
-                                            <ul v-if="customers.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
-                                                <li v-for="customer in customers" :key="customer.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectCustomer(customer)">{{ customer.name }} - {{ customer.id_card_number}}</li>
-                                            </ul>
-                                        </div> -->
-
                                     </div>
                                     <div>
                                         <InputLabel for="seller_id" value="Vendedor" />
@@ -282,18 +222,8 @@ const handleModal = (type) => {
                                             </template>
                                         </Dropdown>
                                         <InputError class="mt-2" :message="formData.errors.seller_id" />
-                                        <!-- <TextInput id="seller_id" class="block mt-1 w-full" type="text" name="seller_id" v-model="searchTermSeller"  required autocomplete="false"/>
-                                        <span @click="handleModal('Vendedores')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Vendedores</span>
-                                        <div class="flex flex-col">
-                                            <ul v-if="sellers.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
-                                                <li v-for="seller in sellers" :key="seller.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="selectSeller(seller)">{{ seller.name }} - {{ seller.id_card_number }}</li>
-                                            </ul>
-                                        </div> -->
-
                                     </div>
                                 </div>
-
-                            <!-- </form> -->
                         </div>
                     </div>
                 </div>
@@ -309,7 +239,6 @@ const handleModal = (type) => {
                                         <InputLabel for="shipment_id" value="Envio" />
                                         <Dropdown editable v-model="formData.shipment_id" :options="props.shipments" optionLabel="name" optionValue="id" placeholder="Selecciona Tipo" class="w-full md:w-14rem" />
                                         <InputError class="mt-2" :message="formData.errors.shipment_id" />
-                                        <!-- <span @click="handleModal('Envios')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Envios</span> -->
                                     </div>
                                 </div>
                         </div>
@@ -335,13 +264,6 @@ const handleModal = (type) => {
                                 </template>
                             </Dropdown>
                             <InputError class="mt-2" :message="formData.errors.productsArray" />
-                            <!-- <TextInput id="product" class="block mt-1 w-full" type="text" name="product" v-model="searchProduct"  required autocomplete="false"/>
-                            <a @click="handleModal('Productos')" class="block mt-1 w-full text-blue-500 text-sm cursor-pointer hover:underline hover:underline-offset-4">Ver Productos</a>
-                            <div class="flex flex-col">
-                                <ul v-if="products.length > 0" class="z-10 bg-white mt-2 rounded-md shadow-lg" style="width: 100%; left: 0;">
-                                    <li v-for="product in products" :key="product.id" class="p-2 cursor-pointer hover:bg-blue-200" @click="addProduct(product)">{{ product.name }} - {{ product.code_number}}</li>
-                                </ul>
-                            </div> -->
                         </div>
                         <div class="p-10">
                             <InputLabel for="discount" value="Descuento (%)" />
