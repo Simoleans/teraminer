@@ -32,8 +32,14 @@ const props = defineProps({
     },
     correlative: {
         type: String,
+    },
+    invoice: {
+        type: Object,
+        required: true
     }
 });
+
+
 
 const customers = ref([]);
 const sellers = ref([]);
@@ -46,13 +52,13 @@ const invoice = ref({
     subTotalFormat: '',
     discountFormat: '',
     totalProduct: '',
-    totalInvoice: '',
-    discount: '',
-    subTotal: '',
-    productsArray: [],
-    shipment_id: '',
-    customer_id: '',
-    seller_id: '',
+    totalInvoice: props.invoice.total,
+    discount: props.invoice.discount,
+    subTotal: props.invoice.subTotal,
+    productsArray: props.invoice.products,
+    shipment_id: props.invoice.shipment_id,
+    customer_id: props.invoice.customer_id,
+    seller_id: props.invoice.seller_id,
 });
 
 const formData = useForm({...invoice.value});
@@ -60,32 +66,32 @@ const formData = useForm({...invoice.value});
 
 const infoSeller = ref(
 {
-    name : '',
-    phone: '',
-    address: '',
-    email: '',
+    name : props.invoice.seller.name,
+    phone: props.invoice.seller.phone,
+    address: props.invoice.seller.address,
+    email: props.invoice.seller.email,
 
 });
 
 const infoCustomer = ref(
 {
-    name : '',
-    phone: '',
-    address: '',
-    email: '',
+    name : props.invoice.customer.name,
+    phone: props.invoice.customer.phone,
+    address: props.invoice.customer.address,
+    email: props.invoice.customer.email,
 
 });
 
 
-const handleInvoiceStore = () => {
+const handleInvoiceUpdate = () => {
     formData.post(route("invoices.store"), {
         onStart: () => console.log("start"),
         onFinish: () => console.log("finish"),
         onError: (error) => console.log(error),
         onSuccess: () => {
             Swal.fire({
-                title: 'Creado',
-                text: 'Se ha creado la factura #'+ props.correlative,
+                title: 'Editado',
+                text: 'Se ha modificado la factura #'+ props.invoice.correlative +' correctamente.',
                 icon: 'success',
                 confirmButtonText: 'Ver Facturas',
                     }).then((result) => {
@@ -172,11 +178,13 @@ const subTotalGeneral = computed(() => {
     return '$'+total;
 });
 
-const handleModal = (type) => {
+/* const handleModal = (type) => {
 
     modalShow.value = true;
     titleModal.value = type;
 }
+ */
+suma();
 
 
 </script>
@@ -187,7 +195,7 @@ const handleModal = (type) => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex justify-between">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">Editar Factura</h2>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">Editar Factura #{{ props.invoice.correlative }}</h2>
                 <Link :href="route('invoices.index')" class="text-sm text-gray-700 underline">Ver Facturas</Link>
             </div>
 
@@ -287,7 +295,7 @@ const handleModal = (type) => {
 
                     <!-- button save -->
                     <div class="flex justify-end p-5">
-                        <PrimaryButton class="mt-4" @click="handleInvoiceStore" >Guardar</PrimaryButton>
+                        <PrimaryButton class="mt-4" @click="handleInvoiceUpdate" >Actualizar</PrimaryButton>
                     </div>
                 </div>
             </div>

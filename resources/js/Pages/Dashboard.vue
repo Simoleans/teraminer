@@ -172,13 +172,6 @@ const subTotalGeneral = computed(() => {
     return '$'+total;
 });
 
-const handleModal = (type) => {
-
-    modalShow.value = true;
-    titleModal.value = type;
-}
-
-
 </script>
 
 <template>

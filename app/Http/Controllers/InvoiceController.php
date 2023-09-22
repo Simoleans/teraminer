@@ -65,7 +65,7 @@ class InvoiceController extends Controller
     public function edit(Invoice $invoice)
     {
         return Inertia::render('Invoices/Edit', [
-            'invoice' => $invoice,
+            'invoice' => $invoice->load(['customer', 'seller', 'shipment']),
             'shipments' => Shipment::all(),
             'customers' => Customer::all(),
             'sellers' => Seller::all(),
