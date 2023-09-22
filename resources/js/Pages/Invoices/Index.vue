@@ -120,6 +120,16 @@ const openModal = (invoice) => {
                     </div>
                     <div class="p-6 text-gray-900">
                         <DataTable :value="props.invoices" tableStyle="min-width: 50rem">
+                            <Column style="min-width:8rem" header="Acción">
+                                <template #body="{data}">
+                                    <div class="flex justify-between">
+                                        <!-- edit button -->
+                                        <Link :href="route('invoices.edit',data.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                            Editar
+                                        </Link>
+                                    </div>
+                                </template>
+                            </Column>
                             <Column field="correlative" header="Nùmero">
                                 <template #body="{data}">
                                     <span>#{{ data.correlative }}</span>
@@ -147,18 +157,8 @@ const openModal = (invoice) => {
                             <Column style="min-width:8rem" header="Productos">
                                 <template #body="{data}">
                                     <div class="flex justify-between">
-                                       <!--  <Link :href="route('invoices.edit',data.id)" class="inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded-full hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out">
-                                            <i class="pi pi-pencil" />
-                                        </Link> -->
-                                        <!-- //button primary show products -->
-
                                         <PrimaryButton class="mt-4" @click="openModal(data)" title="Ver Productos asociados esta factura" ><i class="pi pi-eye" /></PrimaryButton>
-
-                                       <!--  <button type="button" @click="handleDelete(data.id)" class="inline-block px-6 py-2 border-2 border-red-600 text-red-600 font-medium text-xs leading-tight uppercase rounded-full hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out">
-                                            <i class="pi pi-trash" />
-                                        </button> -->
                                     </div>
-
                                 </template>
                             </Column>
                             <Column field="customer_id" header="Cliente">
