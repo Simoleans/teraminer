@@ -14,14 +14,31 @@ class Invoice extends Model
         'customer_id',
         'seller_id',
         'subtotal',
-        'tax',
+        'shipment_id',
         'discount',
         'total',
+        'correlative',
     ];
 
     public function setProductsAttribute($value)
     {
         $this->attributes['products'] = json_encode($value);
+    }
+
+    public function setCorrelativeAttribute($value)
+    {
+        $lastInvoice = self::latest()->first();
+
+        if ($lastInvoice) {
+            $lastCorrelative = $lastInvoice->correlative;
+            $correlativeNumber = (int) substr($lastCorrelative, 1);
+            $newCorrelativeNumber = $correlativeNumber + 1;
+            $value = 'T' . str_pad($newCorrelativeNumber, 4, '0', STR_PAD_LEFT);
+        } else {
+            $value = 'T0001';
+        }
+
+        $this->attributes['correlative'] = $value;
     }
 
     public function product()
@@ -37,5 +54,10 @@ class Invoice extends Model
     public function seller()
     {
         return $this->belongsTo(Seller::class);
+    }
+
+    public function shipment()
+    {
+        return $this->belongsTo(Shipment::class);
     }
 }

@@ -26,7 +26,7 @@ class InvoiceStoreRequest extends FormRequest
             'customer_id' => 'required',
             'seller_id' => 'required',
             'shipment_id' => 'required',
-            'discount' => 'numeric|min:1'
+            'discount' => 'nullable|numeric|min:1'
         ];
 
 

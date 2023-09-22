@@ -6,6 +6,7 @@ use App\Http\Requests\InvoiceStoreRequest;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use App\Models\{Customer,Seller,Product};
+use Inertia\Inertia;
 
 class InvoiceController extends Controller
 {
@@ -14,7 +15,9 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Invoices/Index', [
+            'invoices' => Invoice::with(['customer', 'seller', 'shipment'])->get(),
+        ]);
     }
 
     /**
@@ -41,6 +44,7 @@ class InvoiceController extends Controller
             'shipment_id' => $request->shipment_id,
             'customer_id' => $request->customer_id,
             'seller_id' => $request->seller_id,
+            'correlative' => $request->correlative,
         ];
 
         //create invoice

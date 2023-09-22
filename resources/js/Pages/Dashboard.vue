@@ -115,7 +115,7 @@ const handleInvoiceStore = () => {
         onSuccess: () => {
             Swal.fire({
                 title: 'Creado',
-                text: 'Se ha creado el vendedor',
+                text: 'Se ha creado la factura',
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
             })
@@ -251,7 +251,11 @@ const handleModal = (type) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
+            <div class="flex justify-between">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
+                <Link :href="route('invoices.index')" class="text-sm text-gray-700 underline">Ver Facturas</Link>
+            </div>
+
         </template>
 
         <div class="py-4 p-4 flex flex-col md:flex-row gap-2 ">
