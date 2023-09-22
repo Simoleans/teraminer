@@ -10,7 +10,7 @@ import axios from 'axios';
 import Info from '@/Components/Invoice/Info.vue';
 import Facturacion from '@/Components/Invoice/Facturacion.vue';
 import TablaFacturacion from '@/Components/Invoice/TablaFacturacion.vue';
-import ModalShow from '@/Components/Invoice/ModalShow.vue';
+//import ModalShow from '@/Components/Invoice/ModalShow.vue';
 import Dropdown from 'primevue/dropdown';
 import Swal from 'sweetalert2'
 
@@ -34,13 +34,17 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    correlative: {
+        type: String,
+        //required: true
+    }
 });
 
 
-
+/*
 const searchTermSeller = ref('');
 const searchTermCustomer = ref('');
-const searchProduct = ref('');
+const searchProduct = ref(''); */
 
 const customers = ref([]);
 const sellers = ref([]);
@@ -85,29 +89,6 @@ const infoCustomer = ref(
 
 
 const handleInvoiceStore = () => {
-    /* Swal.fire({
-        title: 'Creado',
-        text: 'Se ha creado la factura',
-        icon: 'success',
-        confirmButtonText: 'Aceptar'
-    }) */
-
-    //handle save use axios route invoices.store and invoice.value
-    //console.log(invoice.value);
-
-    /* axios.post(route("invoices.store"), {...invoice.value, ...formData.value})
-    .then(function (response) {
-        messageTest.value = response.data;
-        Swal.fire({
-            title: 'Creado',
-            text: 'Se ha creado la factura',
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
-        })
-    })
-    .catch(function (error) {
-        console.log(error);
-    }); */
     formData.post(route("invoices.store"), {
         onStart: () => console.log("start"),
         onFinish: () => console.log("finish"),
@@ -115,16 +96,21 @@ const handleInvoiceStore = () => {
         onSuccess: () => {
             Swal.fire({
                 title: 'Creado',
-                text: 'Se ha creado la factura',
+                text: 'Se ha creado la factura #'+ props.correlative,
                 icon: 'success',
-                confirmButtonText: 'Aceptar'
-            })
+                confirmButtonText: 'Ver Facturas',
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            location.href = '/invoices';
+                        }
+                    })
         }
     });
 }
 
 
-
+/*
 watch(searchProduct, (newTerm) => {
     customers.value = [];
     if (newTerm.length < 3) return;
@@ -159,7 +145,7 @@ watch(searchTermSeller, (newTerm) => {
         .catch(error => {
             console.log(error);
         });
-});
+}); */
 
 const selectCustomer = (customer) => {
   formData.customer_id = customer.id;
@@ -384,15 +370,5 @@ const handleModal = (type) => {
                 </div>
             </div>
         </div>
-
-        <ModalShow
-            :modalShow="modalShow"
-            @close="modalShow = false"
-            :title="titleModal"
-            :customers="props.customers"
-            :sellers="props.sellers"
-            :products="props.products"
-            :shipments="props.shipments"
-        />
     </AuthenticatedLayout>
 </template>

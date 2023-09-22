@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { getMonitor } from "consulta-dolar-venezuela";
 import { ref } from 'vue';
+import ModalShow from '@/Components/Invoice/ModalShow.vue';
 
 
 const dolar = ref(false); /*Valor del dólar en EnParaleloVzla*/
@@ -17,8 +18,6 @@ getMonitor("EnParaleloVzla", "price", false).then($ =>{
 }); /*Obtener el valor del dólar en EnParaleloVzla*/
 
 
-
-
 const props = defineProps({
   invoices: {
     type: Object,
@@ -26,9 +25,11 @@ const props = defineProps({
   }
 });
 
-console.log(props.invoices);
+const modalShow = ref(false);
+const dataInvoice = ref([]);
 
-const requestDelete = (id) => {
+
+/* const requestDelete = (id) => {
     router.delete(route("invoices.destroy",id), {
         onStart: () => console.log("start"),
         onFinish: () => console.log("finish"),
@@ -61,7 +62,7 @@ const handleDelete = (id) => {
             )
         }
     })
-};
+}; */
 
 //number format 2000 => $2.000
 const formatNumber = (value) => {
@@ -92,6 +93,11 @@ const convertDiscount = (value) => {
 const totalDiscount = (discount,subtotal) => {
     return formatNumber(subtotal * discount / 100);
 
+};
+
+const openModal = (invoice) => {
+    modalShow.value = true;
+    dataInvoice.value = invoice;
 };
 
 </script>
@@ -146,7 +152,7 @@ const totalDiscount = (discount,subtotal) => {
                                         </Link> -->
                                         <!-- //button primary show products -->
 
-                                        <PrimaryButton class="mt-4" title="Ver Productos asociados esta factura" ><i class="pi pi-eye" /></PrimaryButton>
+                                        <PrimaryButton class="mt-4" @click="openModal(data)" title="Ver Productos asociados esta factura" ><i class="pi pi-eye" /></PrimaryButton>
 
                                        <!--  <button type="button" @click="handleDelete(data.id)" class="inline-block px-6 py-2 border-2 border-red-600 text-red-600 font-medium text-xs leading-tight uppercase rounded-full hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out">
                                             <i class="pi pi-trash" />
@@ -176,5 +182,11 @@ const totalDiscount = (discount,subtotal) => {
                 </div>
             </div>
         </div>
+
+        <ModalShow
+            :modalShow="modalShow"
+            @close="modalShow = false"
+            :invoice="dataInvoice"
+        />
     </AuthenticatedLayout>
 </template>

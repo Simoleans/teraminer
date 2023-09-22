@@ -13,7 +13,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ShipmentController;
 
 //models
-use App\Models\{Customer, Seller, Shipment,Product};
+use App\Models\{Customer, Seller, Shipment,Product,Invoice};
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +40,7 @@ Route::get('/dashboard', function () {
             'customers' => Customer::all(),
             'sellers' => Seller::all(),
             'products' => Product::all(),
+            'correlative' => Invoice::getNextCorrelative(),
         ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

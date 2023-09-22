@@ -25,7 +25,18 @@ class Invoice extends Model
         $this->attributes['products'] = json_encode($value);
     }
 
-    public function setCorrelativeAttribute($value)
+    public function setCorrelativeAttribute()
+    {
+        $this->attributes['correlative'] = self::getNextCorrelative();
+    }
+
+    public function getProductsAttribute()
+    {
+        return json_decode($this->attributes['products']);
+    }
+
+
+    public static function getNextCorrelative()
     {
         $lastInvoice = self::latest()->first();
 
@@ -33,12 +44,12 @@ class Invoice extends Model
             $lastCorrelative = $lastInvoice->correlative;
             $correlativeNumber = (int) substr($lastCorrelative, 1);
             $newCorrelativeNumber = $correlativeNumber + 1;
-            $value = 'T' . str_pad($newCorrelativeNumber, 4, '0', STR_PAD_LEFT);
+            $correlative = 'T' . str_pad($newCorrelativeNumber, 4, '0', STR_PAD_LEFT);
         } else {
-            $value = 'T0001';
+            $correlative = 'T0001';
         }
 
-        $this->attributes['correlative'] = $value;
+        return $correlative;
     }
 
     public function product()
