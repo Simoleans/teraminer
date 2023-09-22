@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InvoiceStoreRequest;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use App\Models\{Customer,Seller,Product};
@@ -27,40 +28,20 @@ class InvoiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(InvoiceStoreRequest $request)
     {
-        //dd($request->all());
+        //dd($request->all(),json_encode($request->productsArray));
 
-
-        //validation return response json message
-        $request->validate([
-            //'total' => 'required',
-            //'subTotal' => 'required',
-            'productsArray' => 'required|array|min:1',
-            'customer_id' => 'required',
-            'seller_id' => 'required',
-            'shipment_id' => 'required',
-        ],
-        [
-            'customer_id.required' => 'El cliente es requerido.',
-            'seller_id.required' => 'El vendedor es requerido.',
-            'shipment_id.required' => 'El tipo de envio es requerido.',
-            'productsArray.required' => 'Los productos son requeridos.',
-            'productsArray.array' => 'El campo Productos debe ser un array.',
-            'productsArray.min' => 'El campo productsArray debe tener al menos un elemento.',
-        ]);
 
         $response = [
             'total' => $request->totalInvoice,
             'discount' => $request->discount,
             'subtotal' => $request->subTotal,
             'products' => $request->productsArray,
-            'shipment_id' => $request->shipping_id ?? null,
+            'shipment_id' => $request->shipment_id,
             'customer_id' => $request->customer_id,
             'seller_id' => $request->seller_id,
         ];
-
-        //dd("Yo no te dije que probaras esto? plasta de mierda",$request->all());
 
         //create invoice
         $invoice = Invoice::create($response);

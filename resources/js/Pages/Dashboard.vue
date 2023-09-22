@@ -356,6 +356,7 @@ const handleModal = (type) => {
                         <div class="p-10">
                             <InputLabel for="discount" value="Descuento (%)" />
                             <TextInput id="discount" class="block mt-1 w-full" type="text" name="discount" v-model="formData.discount"  required autocomplete="false"/>
+                            <InputError class="mt-2" :message="formData.errors.discount" />
                         </div>
                         <Facturacion
                             :subTotalGeneral="subTotalGeneral"
