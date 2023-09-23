@@ -84,7 +84,7 @@ const infoCustomer = ref(
 
 
 const handleInvoiceUpdate = () => {
-    formData.post(route("invoices.store"), {
+    formData.put(route("invoices.update",props.invoice.id), {
         onStart: () => console.log("start"),
         onFinish: () => console.log("finish"),
         onError: (error) => console.log(error),
