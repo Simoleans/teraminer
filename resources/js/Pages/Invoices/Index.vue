@@ -100,6 +100,38 @@ const openModal = (invoice) => {
     dataInvoice.value = invoice;
 };
 
+const printInvoice = (data) => {
+    const vistaHTML = `
+    <html>
+      <head>
+        <title>Factura</title>
+        <script src='https://cdn.tailwindcss.com/3.3.3' />
+        <style>
+          /* Estilos CSS para la factura */
+          /* ... */
+        </style>
+      </head>
+      <body>
+        <!-- Contenido de la factura -->
+        <!-- Puedes utilizar los datos de 'data' para generar el contenido dinámico -->
+        <h1 class='text-2xl'>Factura</h1>
+        <p class='font-extrabold'>Cliente: ${data.customer.name}</p>
+        <p>Total: ${data.total}</p>
+        <!-- ... -->
+      </body>
+    </html>
+  `;
+
+  // Abre una ventana emergente o un iframe con la vista HTML de la factura
+  const ventana = window.open('', '_blank');
+  ventana.document.open();
+  ventana.document.write(vistaHTML);
+  ventana.document.close();
+
+  // Imprime la vista HTML
+  ventana.print();
+};
+
 </script>
 
 <template>
@@ -133,6 +165,17 @@ const openModal = (invoice) => {
                             <Column field="correlative" header="Nùmero">
                                 <template #body="{data}">
                                     <span>#{{ data.correlative }}</span>
+                                </template>
+                            </Column>
+                            <Column style="min-width:8rem" header="Imprimir">
+                                <template #body="{data}">
+                                    <div class="flex justify-between">
+                                        <!-- edit button -->
+                                        <a :href="route('invoices.pdf',data.id)" target="_blank" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                            <!-- icon print -->
+                                            <i class="pi pi-print"></i>
+                                        </a>
+                                    </div>
                                 </template>
                             </Column>
                             <Column field="subtotal" header="Sub-Total">

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InvoiceStoreRequest;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
-use App\Models\{Customer,Seller,Product,Shipment};
+use App\Models\{Customer,Seller,Product,Shipment,Data};
 use Inertia\Inertia;
 
 class InvoiceController extends Controller
@@ -105,6 +105,20 @@ class InvoiceController extends Controller
     public function destroy(Invoice $invoice)
     {
         //
+    }
+
+    /* public function createPDF(Invoice $invoice)
+    {
+        $pdf = PDF::loadView('pdf.invoice', compact('invoice'));
+        return $pdf->download('invoice.pdf');
+    } */
+
+    public function createPDF(Invoice $invoice)
+    {
+        return Inertia::render('Invoices/PDF', [
+            'invoice' => $invoice->load(['customer', 'seller', 'shipment']),
+            'data' => Data::first(),
+        ]);
     }
 
 }
