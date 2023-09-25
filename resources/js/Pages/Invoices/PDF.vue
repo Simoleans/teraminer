@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white p-4 mb-4">
+<div class="bg-white p-2 mb-2">
     <div class="flex justify-between items-center">
         <div class="flex items-center">
             <img src="/img/teraminer.png" alt="" class="w-20">
@@ -24,7 +24,7 @@
         </div>
 
     </div>
-    <div class="mt-4">
+    <div class="mt-1">
         <p class="text-[#6A3989]">{{ data.name }}</p>
         <p class="text-[#6A3989]">{{ data.phone }}</p>
         <p class="text-[#6A3989]">{{ data.email }}</p>
@@ -32,16 +32,16 @@
         <p class="text-[#6A3989]">{{ data.website }}</p>
     </div>
     <div class="flex justify-between">
-        <div class="mt-4">
-            <h2 class="text-2xl font-bold bg-[#6A3989] p-2 rounded-md text-white">VENDEDOR</h2>
+        <div class="mt-2">
+            <h2 class="text-2xl font-bold bg-[#6A3989] p-1 rounded-md text-white">VENDEDOR</h2>
             <p >{{ invoice.seller.name }}</p>
             <p >{{ invoice.seller.phone }}</p>
             <p >{{ invoice.seller.email }}</p>
             <p >{{ invoice.seller.address }}</p>
             <p >{{ invoice.seller.id_card_number }}</p>
         </div>
-        <div class="mt-4">
-            <h2 class="text-2xl font-bold bg-[#6A3989] p-2 rounded-md text-white">CLIENTE</h2>
+        <div class="mt-2">
+            <h2 class="text-2xl font-bold bg-[#6A3989] p-1 rounded-md text-white">CLIENTE</h2>
             <p >{{ invoice.customer.name }}</p>
             <p >{{ invoice.customer.phone }}</p>
             <p >{{ invoice.customer.email }}</p>
@@ -50,44 +50,43 @@
         </div>
     </div>
 
-    <div class="mt-4">
-        <!-- <h2 class="text-2xl font-bold text-[#6A3989] uppercase">ENVíO</h2> -->
+    <div class="mt-2">
         <table class="w-full border border-black text-center">
             <thead>
                 <tr class="bg-[#6A3989] text-white">
-                    <th class="p-2">Nombre</th>
-                    <th class="p-2">Tipo</th>
-                    <th class="p-2">Ruta</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Ruta</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="p-2">{{ invoice.shipment.name }}</td>
-                    <td class="p-2">{{ invoice.shipment.type }}</td>
-                    <td class="p-2">{{ invoice.shipment.route }}</td>
+                    <td>{{ invoice.shipment.name }}</td>
+                    <td>{{ invoice.shipment.type }}</td>
+                    <td>{{ invoice.shipment.route }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div class="mt-4">
+    <div class="mt-2">
         <!-- <h2 class="text-2xl font-bold text-[#6A3989]">PRODUCTOS</h2> -->
         <table class="w-full border border-black text-center mb-15">
             <thead>
                 <tr class="bg-[#6A3989] text-white">
-                    <th class="p-2">Producto</th>
-                    <th class="p-2">Cantidad</th>
-                    <th class="p-2">Precio Unit</th>
-                    <th class="p-2">Total</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unit</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <!-- v-for invoice.products in table -->
             <tbody v-for="product in invoice.products" :key="product.id">
                 <tr>
-                    <td class="p-2">{{ product.name }}</td>
-                    <td class="p-2">{{ product.quantity }}</td>
-                    <td class="p-2">{{ formatNumber(product.unit_price) }}</td>
-                    <td class="p-2">{{ formatNumber(product.total_product) }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ formatNumber(product.unit_price) }}</td>
+                    <td>{{ formatNumber(product.total_product) }}</td>
                 </tr>
 
             </tbody>
@@ -102,7 +101,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="p-2">
+                    <td >
                         Envío a ser realizado desde el almacen principal de Teraminer en, Zhongyi International Express Co., Ltd, RM103, No. 9 Xinhe Street, Bantian, LongGang District, Shenzhen China (518129) - Houston Texas 30 Esplanade Blvd, Suite 100 <br>
                         <br>
                         Pioneer Road, Nanshan District, Shenzhen City. Fecha estimada 31 días previa reserva (aerea), maritimo 62 días según fecha de liberación por las autoridades de sanidad de la aduana en China (COVID)
@@ -112,9 +111,6 @@
             </tbody>
         </table>
         <div class="mt-8 ">
-            <!-- <p class="text-md">Subtotal: </p><span class="font-bold text-xl">{{ formatNumber(invoice.subtotal) }}</span>
-            <p class="text-md" v-if="invoice.discount">Descuento: </p><span class="font-bold text-xl"> -{{ invoice.discount }}% /</span><small>{{ totalDiscount(invoice.discount,invoice.subtotal) }}</small>
-            <p class="text-md">Total: </p> <span class="font-bold text-xl">{{ formatNumber(invoice.total) }}</span> -->
             <table class="w-full border divide-x border-black text-center">
                     <tbody>
                         <tr>

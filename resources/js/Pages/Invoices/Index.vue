@@ -3,12 +3,14 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import { Link,router  } from '@inertiajs/vue3';
-import Swal from 'sweetalert2'
+import { Link  } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { getMonitor } from "consulta-dolar-venezuela";
 import { ref } from 'vue';
 import ModalShow from '@/Components/Invoice/ModalShow.vue';
+import { FilterMatchMode } from 'primevue/api';
+import InputText from 'primevue/inputtext';
+
 
 
 const dolar = ref(false); /*Valor del dólar en EnParaleloVzla*/
@@ -28,41 +30,6 @@ const props = defineProps({
 const modalShow = ref(false);
 const dataInvoice = ref([]);
 
-
-/* const requestDelete = (id) => {
-    router.delete(route("invoices.destroy",id), {
-        onStart: () => console.log("start"),
-        onFinish: () => console.log("finish"),
-        onError: (error) => console.log(error),
-        onSuccess: () => console.log("onSuccess"),
-    });
-};
-const swalWithBootstrapButtons = Swal.mixin({
-    buttonsStyling: true
-})
-
-const handleDelete = (id) => {
-    swalWithBootstrapButtons.fire({
-        title: '¿Estas seguro que quieres eliminar este producto?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si, estoy seguro.',
-        cancelButtonText: 'No, no quiero.',
-        reverseButtons: false
-    }).then((result) => {
-        if (result.isConfirmed) {
-            requestDelete(id)
-        } else if (
-            result.dismiss === Swal.DismissReason.cancel
-        ) {
-            swalWithBootstrapButtons.fire(
-            'Cancelado',
-            'No se ha eliminado el producto.',
-            'error'
-            )
-        }
-    })
-}; */
 
 //number format 2000 => $2.000
 const formatNumber = (value) => {
@@ -100,37 +67,10 @@ const openModal = (invoice) => {
     dataInvoice.value = invoice;
 };
 
-const printInvoice = (data) => {
-    const vistaHTML = `
-    <html>
-      <head>
-        <title>Factura</title>
-        <script src='https://cdn.tailwindcss.com/3.3.3' />
-        <style>
-          /* Estilos CSS para la factura */
-          /* ... */
-        </style>
-      </head>
-      <body>
-        <!-- Contenido de la factura -->
-        <!-- Puedes utilizar los datos de 'data' para generar el contenido dinámico -->
-        <h1 class='text-2xl'>Factura</h1>
-        <p class='font-extrabold'>Cliente: ${data.customer.name}</p>
-        <p>Total: ${data.total}</p>
-        <!-- ... -->
-      </body>
-    </html>
-  `;
 
-  // Abre una ventana emergente o un iframe con la vista HTML de la factura
-  const ventana = window.open('', '_blank');
-  ventana.document.open();
-  ventana.document.write(vistaHTML);
-  ventana.document.close();
-
-  // Imprime la vista HTML
-  ventana.print();
-};
+const filters = ref({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+});
 
 </script>
 
@@ -151,13 +91,23 @@ const printInvoice = (data) => {
                         </Link>
                     </div>
                     <div class="p-6 text-gray-900">
-                        <DataTable :value="props.invoices" tableStyle="min-width: 50rem">
+                        <DataTable v-model:filters="filters" paginator :rows="5" :value="props.invoices" tableStyle="min-width: 50rem" filterDisplay="col"
+                        :globalFilterFields="['correlative', 'total']" sortField="correlative" :sortOrder="-1" >
+                            <template #header>
+                                <div class="flex justify-content-end">
+                                    <span class="p-input-icon-left">
+                                        <i class="pi pi-search" />
+                                        <InputText v-model="filters['global'].value" placeholder="Buscar (Correlativo)" />
+                                    </span>
+                                </div>
+                            </template>
                             <Column style="min-width:8rem" header="Acción">
                                 <template #body="{data}">
                                     <div class="flex justify-between">
                                         <!-- edit button -->
                                         <Link :href="route('invoices.edit',data.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                            Editar
+                                            <!-- icon pencil -->
+                                            <i class="pi pi-pencil"></i>
                                         </Link>
                                     </div>
                                 </template>
