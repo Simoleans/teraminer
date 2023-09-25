@@ -57,6 +57,19 @@ class Invoice extends Model
         return $correlative;
     }
 
+    public static function getLastCorrelative()
+    {
+        $lastInvoice = self::latest()->first();
+
+        if ($lastInvoice) {
+            $lastCorrelative = $lastInvoice->correlative;
+        } else {
+            $lastCorrelative = 'T0001';
+        }
+
+        return $lastCorrelative;
+    }
+
     public function product()
     {
         return $this->belongsTo(Product::class);

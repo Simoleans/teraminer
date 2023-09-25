@@ -93,14 +93,14 @@
             </tbody>
         </table>
     </div>
-    <div class="flex justify-end mt-6 gap-8">
+    <div class="flex justify-between mt-6 gap-12">
         <table class="w-full border border-black text-center mb-15 text-sm">
             <thead>
                 <tr class="bg-[#6A3989] text-white">
                     <th class="p-2">Instrucciones Especiales - Comentarios</th>
                 </tr>
             </thead>
-            <tbody v-for="product in invoice.products" :key="product.id">
+            <tbody>
                 <tr>
                     <td class="p-2">
                         Envío a ser realizado desde el almacen principal de Teraminer en, Zhongyi International Express Co., Ltd, RM103, No. 9 Xinhe Street, Bantian, LongGang District, Shenzhen China (518129) - Houston Texas 30 Esplanade Blvd, Suite 100 <br>
@@ -111,10 +111,26 @@
 
             </tbody>
         </table>
-        <div class="mt-8">
-            <p class="text-xl font-bold">Subtotal: $95</p>
-            <p class="text-xl font-bold" v-if="invoice.discount">Descuento: -{{ invoice.discount }}% / {{ totalDiscount(invoice.discount,invoice.subtotal) }}</p>
-            <p class="text-xl font-bold">Total: {{ formatNumber(invoice.total) }}</p>
+        <div class="mt-8 ">
+            <!-- <p class="text-md">Subtotal: </p><span class="font-bold text-xl">{{ formatNumber(invoice.subtotal) }}</span>
+            <p class="text-md" v-if="invoice.discount">Descuento: </p><span class="font-bold text-xl"> -{{ invoice.discount }}% /</span><small>{{ totalDiscount(invoice.discount,invoice.subtotal) }}</small>
+            <p class="text-md">Total: </p> <span class="font-bold text-xl">{{ formatNumber(invoice.total) }}</span> -->
+            <table class="w-full border divide-x border-black text-center">
+                    <tbody>
+                        <tr>
+                            <td class="p-2">Sub-Total</td>
+                            <td class="p-2 font-bold text-xl">{{ formatNumber(invoice.subtotal) }}</td>
+                        </tr>
+                        <tr v-if="invoice.discount">
+                            <td class="p-2">Descuento</td>
+                            <td class="p-2"><span class="font-bold text-md"> -{{ invoice.discount }}% /</span><small>{{ totalDiscount(invoice.discount,invoice.subtotal) }}</small></td>
+                        </tr>
+                        <tr>
+                            <td class="p-2">Total</td>
+                            <td class="p-2 font-bold text-xl">{{ formatNumber(invoice.total) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
         </div>
     </div>
 </div>

@@ -40,7 +40,7 @@ Route::get('/dashboard', function () {
             'customers' => Customer::all(),
             'sellers' => Seller::all(),
             'products' => Product::all(),
-            'correlative' => Invoice::getNextCorrelative(),
+            'correlative' => Invoice::getLastCorrelative(),
         ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
