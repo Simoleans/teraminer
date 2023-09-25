@@ -35,6 +35,11 @@ class Invoice extends Model
         return json_decode($this->attributes['products']);
     }
 
+    public function getCreatedAtAttribute()
+    {
+        return date('d-m-Y', strtotime($this->attributes['created_at']));
+    }
+
 
     public static function getNextCorrelative()
     {
