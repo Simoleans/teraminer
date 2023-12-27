@@ -39,11 +39,14 @@ const showingNavigationDropdown = ref(false);
                                     Clientes
                                 </NavLink>
                                 <NavLink :href="route('products.index')" :active="route().current('products.*')">
-                                    Products
+                                    Productos
                                 </NavLink>
                                 <!-- //shipment link -->
                                 <NavLink :href="route('shipments.index')" :active="route().current('shipments.*')">
                                     Envios
+                                </NavLink>
+                                <NavLink :href="route('invoices.index')" :active="route().current('invoices.*')">
+                                    Ver Facturas
                                 </NavLink>
 
                             </div>

@@ -180,8 +180,8 @@ const subTotalGeneral = computed(() => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex justify-between">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
-                <Link :href="route('invoices.index')" class="text-sm text-gray-700 underline">Ver Facturas</Link>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">Inicio</h2>
+                <!-- <Link :href="route('invoices.index')" class="text-sm text-gray-700 underline">Ver Facturas</Link> -->
             </div>
 
         </template>

@@ -20,14 +20,27 @@ class Invoice extends Model
         'correlative',
     ];
 
+    /* protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($model) {
+            // Lógica que deseas ejecutar después de guardar los datos en el método store
+            $model->correlative = self::getNextCorrelative();
+        });
+    } */
+
     public function setProductsAttribute($value)
     {
         $this->attributes['products'] = json_encode($value);
     }
 
-    public function setCorrelativeAttribute()
+    public function setCorrelativeAttribute($value)
     {
-        $this->attributes['correlative'] = self::getNextCorrelative();
+        if (!$value) {
+            $this->attributes['correlative'] = self::getNextCorrelative();
+        }
+
     }
 
     public function getProductsAttribute()

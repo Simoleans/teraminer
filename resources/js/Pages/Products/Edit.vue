@@ -36,6 +36,8 @@ const handleEditProduct = () => {
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
             })
+            //redirect nack
+            this.$inertia.visit(this.$route('products.index'))
         }
     });
 }
@@ -71,8 +73,8 @@ const handleEditProduct = () => {
                             </div>
 
                             <div class="mt-4">
-                                <InputLabel for="unit_price" value="Dirección" />
-                                <TextInput id="unit_price" class="block mt-1 w-full" type="text" name="unit_price" v-model="formData.unit_price"  required />
+                                <InputLabel for="unit_price" value="Precio Unitario ($)" />
+                                <TextInput id="unit_price" class="block mt-1 w-full" type="number" step="0.01" name="unit_price" v-model="formData.unit_price"  required />
                             </div>
 
                             <div class="flex items-center justify-end mt-4">

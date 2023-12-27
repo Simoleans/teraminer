@@ -88,7 +88,7 @@ class InvoiceController extends Controller
             'shipment_id' => $request->shipment_id,
             'customer_id' => $request->customer_id,
             'seller_id' => $request->seller_id,
-            'correlative' => $request->correlative,
+            'correlative' => $invoice->correlative,
         ];
 
         //update invoice

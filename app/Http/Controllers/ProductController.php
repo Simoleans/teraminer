@@ -74,7 +74,23 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'code_number' => 'required|unique:products,code_number,' . $product->id,
+            'name' => ['required'],
+            'unit_price' => ['required', 'numeric'],
+        ],
+        [
+            'code_number.required' => 'Code number is required',
+            'code_number.numeric' => 'Code number must be numeric',
+            'code_number.unique' => 'Ya existe un producto con este codigo',
+            'name.required' => 'Name is required',
+            'unit_price.required' => 'Unit price is required',
+            'unit_price.numeric' => 'Unit price must be numeric',
+        ]);
+
+        $product->update($request->all());
+
+        return redirect()->route('products.index');
     }
 
     /**
