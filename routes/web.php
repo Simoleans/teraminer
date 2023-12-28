@@ -68,6 +68,8 @@ Route::middleware('auth')->group(function () {
     //invoice
     Route::resource('/invoices', InvoiceController::class);
     Route::get('/invoice/{invoice}/pdf', [InvoiceController::class, 'createPDF'])->name('invoices.pdf');
+    //garanty
+    Route::get('/invoice/{invoice}/garanty', [InvoiceController::class, 'createGaranty'])->name('invoices.garanty');
 
     Route::get('/search-customer', [InvoiceController::class, 'searchCustomer']);
     Route::get('/search-seller', [InvoiceController::class, 'searchSeller']);

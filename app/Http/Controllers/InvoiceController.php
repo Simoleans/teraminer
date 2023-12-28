@@ -121,4 +121,12 @@ class InvoiceController extends Controller
         ]);
     }
 
+    public function createGaranty(Invoice $invoice)
+    {
+        return Inertia::render('Invoices/Garanty', [
+            'invoice' => $invoice->load(['customer', 'seller', 'shipment']),
+            'data' => Data::first(),
+        ]);
+    }
+
 }

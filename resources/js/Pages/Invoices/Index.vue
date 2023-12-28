@@ -126,6 +126,13 @@ const filters = ref({
                                             <i class="pi pi-print"></i>
                                         </a>
                                     </div>
+                                    <div class="flex justify-between">
+                                        <!-- edit button -->
+                                        <a :href="route('invoices.garanty',data.id)" target="_blank" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                            <!-- icon print -->
+                                            <i class="pi pi-print"></i>
+                                        </a>
+                                    </div>
                                 </template>
                             </Column>
                             <Column field="subtotal" header="Sub-Total">
