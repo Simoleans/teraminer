@@ -61,6 +61,8 @@ Route::middleware('auth')->group(function () {
 
     //products
     Route::resource('/products', ProductController::class);
+    //camara
+    Route::get('/products/camara', [ProductController::class, 'camara'])->name('products.camara');
 
     //shipment
     Route::resource('/shipments',ShipmentController::class);

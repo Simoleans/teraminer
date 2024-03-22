@@ -5,6 +5,106 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { Link,router  } from '@inertiajs/vue3';
 import Swal from 'sweetalert2'
+import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
+import { ref, computed, onMounted } from 'vue'
+const result = ref('')
+
+  function onDetect(detectedCodes) {
+    console.log(detectedCodes)
+    result.value = JSON.stringify(detectedCodes.map((code) => code.rawValue))
+  }
+
+  const selectedDevice = ref(null)
+  const devices = ref([])
+
+  const trackFunctionOptions = [
+  { text: 'nothing (default)', value: undefined },
+  { text: 'outline', value: paintOutline },
+  { text: 'centered text', value: paintCenterText },
+  { text: 'bounding box', value: paintBoundingBox }
+]
+const trackFunctionSelected = ref(trackFunctionOptions[1])
+
+const selectedBarcodeFormats = computed(() => {
+  return Object.keys(barcodeFormats.value).filter((format) => barcodeFormats.value[format])
+})
+
+/*** error handling ***/
+
+const error = ref('')
+
+function onError(err) {
+  error.value = `[${err.name}]: `
+
+  if (err.name === 'NotAllowedError') {
+    error.value += 'you need to grant camera access permission'
+  } else if (err.name === 'NotFoundError') {
+    error.value += 'no camera on this device'
+  } else if (err.name === 'NotSupportedError') {
+    error.value += 'secure context required (HTTPS, localhost)'
+  } else if (err.name === 'NotReadableError') {
+    error.value += 'is the camera already in use?'
+  } else if (err.name === 'OverconstrainedError') {
+    error.value += 'installed cameras are not suitable'
+  } else if (err.name === 'StreamApiNotSupportedError') {
+    error.value += 'Stream API is not supported in this browser'
+  } else if (err.name === 'InsecureContextError') {
+    error.value +=
+      'Camera access is only permitted in secure context. Use HTTPS or localhost rather than HTTP.'
+  } else {
+    error.value += err.message
+  }
+}
+
+/*** track functons ***/
+
+function paintOutline(detectedCodes, ctx) {
+  for (const detectedCode of detectedCodes) {
+    const [firstPoint, ...otherPoints] = detectedCode.cornerPoints
+
+    ctx.strokeStyle = 'red'
+
+    ctx.beginPath()
+    ctx.moveTo(firstPoint.x, firstPoint.y)
+    for (const { x, y } of otherPoints) {
+      ctx.lineTo(x, y)
+    }
+    ctx.lineTo(firstPoint.x, firstPoint.y)
+    ctx.closePath()
+    ctx.stroke()
+  }
+}
+function paintBoundingBox(detectedCodes, ctx) {
+  for (const detectedCode of detectedCodes) {
+    const {
+      boundingBox: { x, y, width, height }
+    } = detectedCode
+
+    ctx.lineWidth = 2
+    ctx.strokeStyle = '#007bff'
+    ctx.strokeRect(x, y, width, height)
+  }
+}
+function paintCenterText(detectedCodes, ctx) {
+  for (const detectedCode of detectedCodes) {
+    const { boundingBox, rawValue } = detectedCode
+
+    const centerX = boundingBox.x + boundingBox.width / 2
+    const centerY = boundingBox.y + boundingBox.height / 2
+
+    const fontSize = Math.max(12, (50 * boundingBox.width) / ctx.canvas.width)
+
+    ctx.font = `bold ${fontSize}px sans-serif`
+    ctx.textAlign = 'center'
+
+    ctx.lineWidth = 3
+    ctx.strokeStyle = '#35495e'
+    ctx.strokeText(detectedCode.rawValue, centerX, centerY)
+
+    ctx.fillStyle = '#5cb984'
+    ctx.fillText(rawValue, centerX, centerY)
+  }
+}
 
 
 
@@ -57,14 +157,31 @@ const handleDelete = (id) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Productos</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">Productos</h2>
         </template>
 
+        <div>
+        <qrcode-stream
+         :constraints="{ deviceId: selectedDevice.deviceId }"
+          :track="trackFunctionSelected.value"
+          :formats="selectedBarcodeFormats"
+          @error="onError"
+          @detect="onDetect"
+          v-if="selectedDevice !== null"
+        />
+        <p
+          v-else
+          class="error"
+        >
+          No cameras on this device
+        </p>
+      </div>
+
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="flex justify-end p-4">
-                        <Link :href="route('products.create')" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        <Link :href="route('products.create')" class="px-4 py-2 font-bold text-white bg-green-500 rounded hover:bg-green-700">
                             Crear
                         </Link>
                     </div>
@@ -76,10 +193,10 @@ const handleDelete = (id) => {
                             <Column style="min-width:8rem">
                                 <template #body="{data}">
                                     <div class="flex justify-between">
-                                        <Link :href="route('products.edit',data.id)" class="inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded-full hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out">
+                                        <Link :href="route('products.camara')" class="inline-block px-6 py-2 text-xs font-medium leading-tight text-blue-600 uppercase transition duration-150 ease-in-out border-2 border-blue-600 rounded-full hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0">
                                             <i class="pi pi-pencil" />
                                         </Link>
-                                        <button type="button" @click="handleDelete(data.id)" class="inline-block px-6 py-2 border-2 border-red-600 text-red-600 font-medium text-xs leading-tight uppercase rounded-full hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out">
+                                        <button type="button" @click="handleDelete(data.id)" class="inline-block px-6 py-2 text-xs font-medium leading-tight text-red-600 uppercase transition duration-150 ease-in-out border-2 border-red-600 rounded-full hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0">
                                             <i class="pi pi-trash" />
                                         </button>
                                     </div>

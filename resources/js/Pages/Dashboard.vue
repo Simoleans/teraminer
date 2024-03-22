@@ -180,19 +180,19 @@ const subTotalGeneral = computed(() => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex justify-between">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">Inicio</h2>
+                <h2 class="text-xl font-semibold leading-tight text-gray-800">Inicio</h2>
                 <!-- <Link :href="route('invoices.index')" class="text-sm text-gray-700 underline">Ver Facturas</Link> -->
             </div>
 
         </template>
 
-        <div class="py-4 p-4 flex flex-col md:flex-row gap-2 ">
+        <div class="flex flex-col gap-2 p-4 py-4 md:flex-row ">
             <!-- info customer and seller -->
-            <div class="max-w-7xl w-full md:lg:w-3/5  lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="w-full max-w-7xl md:lg:w-3/5 lg:px-8">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900">Cliente/Vendedor</div>
-                    <div class="grow bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                        <div class="p-4 sm:px-8 bg-white border-b border-gray-200">
+                    <div class="overflow-hidden bg-white shadow-xl grow sm:rounded-lg">
+                        <div class="p-4 bg-white border-b border-gray-200 sm:px-8">
                                 <div class="grid grid-cols-1 gap-4">
                                     <div>
                                         <InputLabel for="customer_id" value="Cliente" />
@@ -222,11 +222,11 @@ const subTotalGeneral = computed(() => {
                 </div>
             </div>
             <Info :infoSeller="infoSeller" :infoCustomer="infoCustomer"/>
-            <div class="max-w-7xl w-full md:lg:w-3/5 sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="w-full max-w-7xl md:lg:w-3/5 sm:px-6 lg:px-8">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900">Envío</div>
-                    <div class="grow bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                        <div class="p-4 sm:px-8 bg-white border-b border-gray-200">
+                    <div class="overflow-hidden bg-white shadow-xl grow sm:rounded-lg">
+                        <div class="p-4 bg-white border-b border-gray-200 sm:px-8">
                                 <div class="grid grid-cols-1 gap-4">
                                     <div>
                                         <InputLabel for="shipment_id" value="Envio" />
@@ -240,12 +240,12 @@ const subTotalGeneral = computed(() => {
             </div>
         </div>
 
-        <div class="py-4 p-4 w-full flex flex-col md:flex-row gap-2 ">
+        <div class="flex flex-col w-full gap-2 p-4 py-4 md:flex-row ">
             <!-- info customer and seller -->
             <div class="w-full sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-4 text-gray-900">Productos</div>
-                    <div class="flex  md:lg:flex-row justify-between flex-col-reverse">
+                    <div class="flex flex-col-reverse justify-between md:lg:flex-row">
                         <div class="p-10 grow">
                             <InputLabel for="product" value="Producto" />
                             <Dropdown editable v-model="formData.product_id" :options="props.products" optionLabel="name" optionValue="id" placeholder="Selecciona Producto" class="w-full md:w-14rem">
@@ -260,7 +260,7 @@ const subTotalGeneral = computed(() => {
                         </div>
                         <div class="p-10">
                             <InputLabel for="discount" value="Descuento (%)" />
-                            <TextInput id="discount" class="block mt-1 w-full" type="text" name="discount" v-model="formData.discount"  required autocomplete="false"/>
+                            <TextInput id="discount" class="block w-full mt-1" type="text" name="discount" v-model="formData.discount"  required autocomplete="false"/>
                             <InputError class="mt-2" :message="formData.errors.discount" />
                         </div>
                         <Facturacion

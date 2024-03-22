@@ -106,4 +106,9 @@ class ProductController extends Controller
 
         return redirect()->route('products.index');
     }
+
+    public function camara()
+    {
+        return Inertia::render('Products/Camara');
+    }
 }
