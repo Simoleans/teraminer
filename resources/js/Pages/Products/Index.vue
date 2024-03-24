@@ -14,8 +14,23 @@ const result = ref('')
     result.value = JSON.stringify(detectedCodes.map((code) => code.rawValue))
   }
 
-  const selectedDevice = ref(null)
-  const devices = ref([])
+
+/*** select camera ***/
+
+const selectedDevice = ref(null)
+const devices = ref([])
+
+onMounted(async () => {
+
+    console.log('mounted')
+  devices.value = (await navigator.mediaDevices.enumerateDevices()).filter(
+    ({ kind }) => kind === 'videoinput'
+  )
+
+  if (devices.value.length > 0) {
+    selectedDevice.value = devices.value[0]
+  }
+})
 
   const trackFunctionOptions = [
   { text: 'nothing (default)', value: undefined },
@@ -24,6 +39,30 @@ const result = ref('')
   { text: 'bounding box', value: paintBoundingBox }
 ]
 const trackFunctionSelected = ref(trackFunctionOptions[1])
+
+const barcodeFormats = ref({
+  aztec: false,
+  code_128: false,
+  code_39: false,
+  code_93: false,
+  codabar: false,
+  databar: false,
+  databar_expanded: false,
+  data_matrix: false,
+  dx_film_edge: false,
+  ean_13: false,
+  ean_8: false,
+  itf: false,
+  maxi_code: false,
+  micro_qr_code: false,
+  pdf417: false,
+  qr_code: true,
+  rm_qr_code: false,
+  upc_a: false,
+  upc_e: false,
+  linear_codes: false,
+  matrix_codes: false
+})
 
 const selectedBarcodeFormats = computed(() => {
   return Object.keys(barcodeFormats.value).filter((format) => barcodeFormats.value[format])
@@ -159,6 +198,22 @@ const handleDelete = (id) => {
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">Productos</h2>
         </template>
+
+        <select v-model="selectedDevice">
+            <option
+              v-for="device in devices"
+              :key="device.label"
+              :value="device"
+            >
+              {{ device.label }}
+            </option>
+          </select>
+
+          <p class="error">{{ error }}</p>
+
+    <p class="decode-result">
+      Last result: <b>{{ result }}</b>
+    </p>
 
         <div>
         <qrcode-stream
