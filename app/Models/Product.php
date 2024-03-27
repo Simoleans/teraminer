@@ -13,6 +13,7 @@ class Product extends Model
         'name',
         'code_number',
         'unit_price',
+        'serial',
     ];
 
     /* public function getUnitPriceAttribute($value)

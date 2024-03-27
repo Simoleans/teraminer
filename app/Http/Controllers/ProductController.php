@@ -74,10 +74,12 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+
         $request->validate([
             'code_number' => 'required|unique:products,code_number,' . $product->id,
             'name' => ['required'],
             'unit_price' => ['required', 'numeric'],
+            'serial' => 'unique:products,serial,' . $product->id,
         ],
         [
             'code_number.required' => 'Code number is required',
@@ -86,9 +88,28 @@ class ProductController extends Controller
             'name.required' => 'Name is required',
             'unit_price.required' => 'Unit price is required',
             'unit_price.numeric' => 'Unit price must be numeric',
+            'serial.unique' => 'Ya existe un producto con este serial',
         ]);
 
         $product->update($request->all());
+
+        return redirect()->route('products.index');
+    }
+
+    public function updateSerial(Request $request, Product $product)
+    {
+        //dd($product->id, $request->all());
+        $request->validate([
+            'serial' => 'required|unique:products,serial,' . $product->id,
+        ],
+        [
+            'serial.required' => 'Serial es requerido',
+            'serial.unique' => 'Ya existe un producto con este serial',
+        ]);
+
+        $product->serial = $request->serial;
+        $product->save();
+
 
         return redirect()->route('products.index');
     }

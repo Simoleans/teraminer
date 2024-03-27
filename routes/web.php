@@ -61,6 +61,8 @@ Route::middleware('auth')->group(function () {
 
     //products
     Route::resource('/products', ProductController::class);
+    //updateSerial
+    Route::put('/products/{product}/updateSerial', [ProductController::class, 'updateSerial'])->name('products.updateSerial');
     //camara
     Route::get('/products/camara', [ProductController::class, 'camara'])->name('products.camara');
 

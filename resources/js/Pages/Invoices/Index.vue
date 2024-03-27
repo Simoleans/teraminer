@@ -14,10 +14,21 @@ import InputText from 'primevue/inputtext';
 
 
 const dolar = ref(false); /*Valor del dólar en EnParaleloVzla*/
+const dolarBCV = ref(false); /*Valor del dólar en BCV*/
 
-getMonitor("EnParaleloVzla", "price", false).then($ =>{
-    dolar.value = $.enparalelovzla.price;
-}); /*Obtener el valor del dólar en EnParaleloVzla*/
+// get api fetch https://pydolarvenezuela-api.vercel.app/api/v1/dollar/unit/enparalelovzla
+fetch('https://pydolarvenezuela-api.vercel.app/api/v1/dollar/unit/enparalelovzla')
+    .then(response => response.json())
+    .then(data => {
+        dolar.value = data.price;
+    }); /*Obtener el valor del dólar en EnParaleloVzla*/
+
+//https://pydolarvenezuela-api.vercel.app/api/v1/dollar?page=bcv api
+fetch('https://pydolarvenezuela-api.vercel.app/api/v1/dollar?page=bcv')
+    .then(response => response.json())
+    .then(data => {
+        dolarBCV.value = data.monitors.usd.price;
+    }); /*Obtener el valor del dólar en BCV*/
 
 
 const props = defineProps({
@@ -79,14 +90,19 @@ const filters = ref({
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Facturas</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">Facturas</h2>
         </template>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="flex justify-end p-4">
-                        <Link :href="route('dashboard')" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                    <div class="flex items-center justify-between p-4">
+                        <div>
+                            <span>Dolar Paralelo: </span> <strong>{{ formatNumberVzla(dolar) }}</strong><br>
+                            <span>Dolar BCV: </span> <strong>{{ formatNumberVzla(dolarBCV) }}</strong>
+
+                        </div>
+                        <Link :href="route('dashboard')" class="px-4 py-2 font-bold text-white bg-green-500 rounded hover:bg-green-700">
                             Crear
                         </Link>
                     </div>
@@ -105,7 +121,7 @@ const filters = ref({
                                 <template #body="{data}">
                                     <div class="flex justify-between">
                                         <!-- edit button -->
-                                        <Link :href="route('invoices.edit',data.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        <Link :href="route('invoices.edit',data.id)" class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">
                                             <!-- icon pencil -->
                                             <i class="pi pi-pencil"></i>
                                         </Link>
@@ -121,18 +137,16 @@ const filters = ref({
                                 <template #body="{data}">
                                     <div class="flex justify-between">
                                         <!-- edit button -->
-                                        <a :href="route('invoices.pdf',data.id)" target="_blank" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                        <a :href="route('invoices.pdf',data.id)" target="_blank" class="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700">
                                             <!-- icon print -->
                                             <i class="pi pi-print"></i>
                                         </a>
                                     </div>
-                                    <div class="flex justify-between">
-                                        <!-- edit button -->
-                                        <a :href="route('invoices.garanty',data.id)" target="_blank" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                            <!-- icon print -->
+                                    <!-- <div class="flex justify-between">
+                                        <a :href="route('invoices.garanty',data.id)" target="_blank" class="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700">
                                             <i class="pi pi-print"></i>
                                         </a>
-                                    </div>
+                                    </div> -->
                                 </template>
                             </Column>
                             <Column field="subtotal" header="Sub-Total">
@@ -145,7 +159,7 @@ const filters = ref({
                                 <template #body="{data}">
                                     <span v-if="data.discount > 0" class="text-red-600 font-sm">{{ convertDiscount(data.discount) }}%</span><br>
                                     <span v-if="data.discount > 0" class="font-bold">{{ totalDiscount(data.discount,data.subtotal) }}</span>
-                                    <span v-else class="text-green-600 font-bold">N/T</span>
+                                    <span v-else class="font-bold text-green-600">N/T</span>
                                 </template>
                             </Column>
                             <Column field="total" header="Total">
