@@ -15,7 +15,11 @@ class GarantyController extends Controller
     public function index()
     {
         return Inertia::render('Garanty/Index', [
-            'garanties' => Garanty::with('invoice', 'garanty_products', 'garanty_products.product')->get(),
+            'garanties' => Garanty::with('invoice', 'garanty_products', 'garanty_products.product')
+                ->whereHas('invoice', function ($query) {
+                    $query->where('status', 1);
+                })->get(),
+
             'flash' => [
                 'error' => session('error'),
             ],

@@ -168,7 +168,7 @@ const formatNumber = (value) => {
                                     </div>
                                 </template>
                             </Column>
-                            <template #footer> Total : {{ props.invoices ? props.invoices.length : 0 }} Facturas. </template>
+                            <!-- <template #footer> Total : {{ props.invoices ? props.invoices.length : 0 }} Facturas. </template> -->
                         </DataTable>
                     </div>
                 </div>
