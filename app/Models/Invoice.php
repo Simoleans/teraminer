@@ -18,6 +18,7 @@ class Invoice extends Model
         'discount',
         'total',
         'correlative',
+        'status'
     ];
 
     /* protected static function boot()

@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\GarantyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ShipmentController;
@@ -65,6 +66,13 @@ Route::middleware('auth')->group(function () {
     Route::put('/products/{product}/updateSerial', [ProductController::class, 'updateSerial'])->name('products.updateSerial');
     //camara
     Route::get('/products/camara', [ProductController::class, 'camara'])->name('products.camara');
+
+    //garanty
+    Route::resource('/garanty', GarantyController::class);
+    //serialUpdate
+    Route::post('/garanty/serialUpdate', [GarantyController::class, 'serialUpdate'])->name('garanty.serialUpdate');
+    //pdf
+    Route::get('/garanty/{garanty}/pdf', [GarantyController::class, 'createPDF'])->name('garanty.pdf');
 
     //shipment
     Route::resource('/shipments',ShipmentController::class);

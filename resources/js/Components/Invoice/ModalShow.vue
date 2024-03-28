@@ -22,7 +22,7 @@
                 <template #footer> Total : {{ invoice.products ? invoice.products.length : 0 }} Productos. </template>
             </DataTable>
 
-            <div class="mt-3 flex justify-end">
+            <div class="flex justify-end mt-3">
                 <SecondaryButton @click="$emit('close')"> Cerrar </SecondaryButton>
             </div>
         </div>

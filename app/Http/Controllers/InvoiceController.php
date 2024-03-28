@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InvoiceStoreRequest;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
-use App\Models\{Customer,Seller,Product,Shipment,Data};
+use App\Models\{Customer,Seller,Product,Shipment,Data,Garanty,GarantyProduct};
 use Inertia\Inertia;
 
 class InvoiceController extends Controller
@@ -48,6 +48,21 @@ class InvoiceController extends Controller
         //create invoice
         $invoice = Invoice::create($response);
 
+        //create garanties
+        $garanty = Garanty::create([
+            'invoice_id' => $invoice->id,
+        ]);
+
+        foreach ($request->productsArray as $product) {
+            for($i = 0; $i < $product['quantity']; $i++) {
+                GarantyProduct::create([
+                    'garanty_id' => $garanty->id,
+                    'product_id' => $product['id'],
+                    'serial' => $product['serial'],
+                ]);
+            }
+        }
+
         return redirect()->route('dashboard');
     }
 
@@ -79,7 +94,7 @@ class InvoiceController extends Controller
     public function update(Request $request, Invoice $invoice)
     {
         //dd($request->all());
-
+/*
         $response = [
             'total' => $request->totalInvoice,
             'discount' => $request->discount,
@@ -89,12 +104,17 @@ class InvoiceController extends Controller
             'customer_id' => $request->customer_id,
             'seller_id' => $request->seller_id,
             'correlative' => $invoice->correlative,
+        ]; */
+
+        //$response update status to 0
+        $response = [
+            'status' => 0,
         ];
 
         //update invoice
         $invoice->update($response);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('invoices.index');
 
 
     }

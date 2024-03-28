@@ -48,6 +48,10 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('invoices.index')" :active="route().current('invoices.*')">
                                     Ver Facturas
                                 </NavLink>
+                                <!-- garanty -->
+                                <NavLink :href="route('garanty.index')" :active="route().current('garanty.*')">
+                                    Garantias
+                                </NavLink>
 
                             </div>
                         </div>
@@ -154,6 +158,7 @@ const showingNavigationDropdown = ref(false);
                             <ResponsiveNavLink :href="route('products.index')" class="text-white"> Productos </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('shipments.index')" class="text-white"> Envios </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('invoices.index')" class="text-white"> Ver Facturas </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('garanty.index')" class="text-white"> Garantias </ResponsiveNavLink>
 
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button" class="text-white">
                                 Salir

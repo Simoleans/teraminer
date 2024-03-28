@@ -3,13 +3,28 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import { Link  } from '@inertiajs/vue3';
+import { Link,router  } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { getMonitor } from "consulta-dolar-venezuela";
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import ModalShow from '@/Components/Invoice/ModalShow.vue';
 import { FilterMatchMode } from 'primevue/api';
 import InputText from 'primevue/inputtext';
+import axios from 'axios';
+import Swal from 'sweetalert2'
+
+const bitcoinPrice = ref(0);
+
+const fetchBitcoinPrice = async () => {
+  try {
+    const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+    bitcoinPrice.value = response.data.bitcoin.usd;
+  } catch (error) {
+    console.error('Error al obtener el precio del Bitcoin:', error);
+  }
+};
+
+onMounted(fetchBitcoinPrice);
 
 
 
@@ -50,6 +65,13 @@ const formatNumber = (value) => {
     }).format(value);
 };
 
+//total to btc
+const totalToBTC = (value) => {
+    const total = value / bitcoinPrice.value;
+
+    return total.toFixed(3);
+};
+
 //format number venezuelan
 const formatNumberVzla = (value) => {
     return new Intl.NumberFormat("es-CL", {
@@ -57,6 +79,7 @@ const formatNumberVzla = (value) => {
         currency: "VES",
     }).format(value);
 };
+
 
 //function convert discount
 const convertDiscount = (value) => {
@@ -83,6 +106,42 @@ const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 
+
+const requestDelete = (id) => {
+    router.put(route("invoices.update",id), {
+        onStart: () => console.log("start"),
+        onFinish: () => console.log("finish"),
+        onError: (error) => console.log(error),
+        onSuccess: () => console.log("onSuccess"),
+    });
+};
+const swalWithBootstrapButtons = Swal.mixin({
+    buttonsStyling: true
+})
+
+const handleDelete = (id) => {
+    swalWithBootstrapButtons.fire({
+        title: '¿Estas seguro que quieres anular esta factura?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, estoy seguro.',
+        cancelButtonText: 'No, no quiero.',
+        reverseButtons: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            requestDelete(id)
+        } else if (
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+            'Cancelado',
+            'No se ha anulado la Factura.',
+            'error'
+            )
+        }
+    })
+};
+
 </script>
 
 <template>
@@ -99,7 +158,8 @@ const filters = ref({
                     <div class="flex items-center justify-between p-4">
                         <div>
                             <span>Dolar Paralelo: </span> <strong>{{ formatNumberVzla(dolar) }}</strong><br>
-                            <span>Dolar BCV: </span> <strong>{{ formatNumberVzla(dolarBCV) }}</strong>
+                            <span>Dolar BCV: </span> <strong>{{ formatNumberVzla(dolarBCV) }}</strong><br>
+                            <span>Bitcoin: </span> <strong>{{ formatNumber(bitcoinPrice) }}</strong>
 
                         </div>
                         <Link :href="route('dashboard')" class="px-4 py-2 font-bold text-white bg-green-500 rounded hover:bg-green-700">
@@ -120,11 +180,15 @@ const filters = ref({
                             <Column style="min-width:8rem" header="Acción">
                                 <template #body="{data}">
                                     <div class="flex justify-between">
-                                        <!-- edit button -->
-                                        <Link :href="route('invoices.edit',data.id)" class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">
-                                            <!-- icon pencil -->
+                                        <!-- <Link :href="route('invoices.edit',data.id)" class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">
                                             <i class="pi pi-pencil"></i>
-                                        </Link>
+                                        </Link> -->
+                                        <button v-if="data.status == 1" title="Anular Factura"  @click="handleDelete(data.id)" class="text-white bg-red-500 hover:bg-red-500/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 me-2 mb-2">
+                                            <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                <path fill-rule="evenodd" d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </button>
+                                        <span v-else class="px-4 py-2 text-white bg-red-500 rounded-lg">Anulada</span>
                                     </div>
                                 </template>
                             </Column>
@@ -136,9 +200,7 @@ const filters = ref({
                             <Column style="min-width:8rem" header="Imprimir">
                                 <template #body="{data}">
                                     <div class="flex justify-between">
-                                        <!-- edit button -->
-                                        <a :href="route('invoices.pdf',data.id)" target="_blank" class="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700">
-                                            <!-- icon print -->
+                                        <a :href="route('invoices.pdf',data.id)" target="_blank" class="px-4 py-2 font-bold text-white bg-red-400 rounded hover:bg-red-500">
                                             <i class="pi pi-print"></i>
                                         </a>
                                     </div>
@@ -152,7 +214,7 @@ const filters = ref({
                             <Column field="subtotal" header="Sub-Total">
                                 <template #body="{data}">
                                     <span class="text-xl font-bold">{{ formatNumber(data.subtotal) }}</span><br>
-                                    <span v-if="dolar">{{ formatNumberVzla(parseFloat(dolar) * parseFloat(data.subtotal)) }}</span>
+                                    <span v-if="dolar">{{ formatNumberVzla(parseFloat(dolar) * parseFloat(data.subtotal)) }}</span><br>
                                 </template>
                             </Column>
                             <Column field="discount" header="Descuento">
@@ -165,7 +227,8 @@ const filters = ref({
                             <Column field="total" header="Total">
                                 <template #body="{data}">
                                     <span class="text-xl font-bold">{{ formatNumber(data.total) }}</span><br>
-                                    <span>{{ formatNumberVzla(parseFloat(dolar) * parseFloat(data.total)) }}</span>
+                                    <span>{{ formatNumberVzla(parseFloat(dolar) * parseFloat(data.total)) }}</span><br>
+                                    <span v-if="bitcoinPrice">{{  totalToBTC(data.subtotal)  }} BTC</span>
                                 </template>
                             </Column>
                             <Column style="min-width:8rem" header="Productos">

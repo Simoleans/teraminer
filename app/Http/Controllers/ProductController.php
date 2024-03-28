@@ -98,7 +98,6 @@ class ProductController extends Controller
 
     public function updateSerial(Request $request, Product $product)
     {
-        //dd($product->id, $request->all());
         $request->validate([
             'serial' => 'required|unique:products,serial,' . $product->id,
         ],
