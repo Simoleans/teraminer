@@ -8,6 +8,8 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+
+const web = 'https://teraminer.com.ve/';
 </script>
 
 <template>
@@ -87,6 +89,13 @@ const showingNavigationDropdown = ref(false);
                                     <template #content>
                                         <DropdownLink :href="route('profile.edit')"> Perfil </DropdownLink>
                                         <DropdownLink :href="route('data.index')"> Data </DropdownLink>
+                                        <a
+                                            :href="web"
+                                            class="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                            target="_blank"
+                                        >
+                                        Ir a Pagina
+                                        </a>
                                         <hr>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             Salir
@@ -159,7 +168,6 @@ const showingNavigationDropdown = ref(false);
                             <ResponsiveNavLink :href="route('shipments.index')" class="text-white"> Envios </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('invoices.index')" class="text-white"> Ver Facturas </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('garanty.index')" class="text-white"> Garantias </ResponsiveNavLink>
-
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button" class="text-white">
                                 Salir
                             </ResponsiveNavLink>
