@@ -244,7 +244,7 @@ const handleEditProduct = () => {
                             </div>
 
                             <!-- serial -->
-                            <div class="mt-4">
+                           <!--  <div class="mt-4">
                                 <InputLabel for="serial" value="Serial" />
                                 <TextInput id="serial" class="block w-full mt-1" type="text" name="serial" v-model="formData.serial"  required />
                                 <InputError :message="formData.errors.serial" />
@@ -253,7 +253,7 @@ const handleEditProduct = () => {
                                 </button>
 
 
-                            </div>
+                            </div> -->
 
                             <div class="flex items-center justify-end mt-4">
                                 <Link :href="route('products.index')" class="ml-4">

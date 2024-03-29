@@ -79,7 +79,7 @@ class ProductController extends Controller
             'code_number' => 'required|unique:products,code_number,' . $product->id,
             'name' => ['required'],
             'unit_price' => ['required', 'numeric'],
-            'serial' => 'unique:products,serial,' . $product->id,
+            //'serial' => 'unique:products,serial,' . $product->id,
         ],
         [
             'code_number.required' => 'Code number is required',

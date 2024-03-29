@@ -267,7 +267,7 @@ const switchCamera = () => {
                             <Column field="code_number" header="Codigo"></Column>
                             <Column field="name" header="Nombre"></Column>
                             <Column field="unit_price" header="Precio Unitario"></Column>
-                            <Column field="serial" header="Serial">
+                            <!-- <Column field="serial" header="Serial">
                                 <template #body="{data}">
                                     <span v-if="data.serial != null">{{ data.serial }}</span>
                                     <button title="Agregar Serial" v-else type="button" @click="openModalCamera(data.id)" class="text-white bg-[#1da1f2] hover:bg-[#1da1f2]/90 focus:ring-4 focus:outline-none focus:ring-[#1da1f2]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#1da1f2]/55 me-2 mb-2">
@@ -276,7 +276,7 @@ const switchCamera = () => {
                                         </svg>
                                     </button>
                                 </template>
-                            </Column>
+                            </Column> -->
                             <Column style="min-width:8rem">
                                 <template #body="{data}">
                                     <div class="flex justify-center gap-5">

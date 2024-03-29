@@ -26,9 +26,6 @@ const props = defineProps({
   },
 });
 
-const blankValidation = ref('_blank');
-
-
 
 onMounted(() => {
   if (props.flash.error) {
@@ -40,8 +37,6 @@ onMounted(() => {
     }).then(() => {
        openModal(props.productsData);
     });
-  }else{
-    blankValidation.value = '_self';
   }
 });
 
@@ -117,6 +112,14 @@ const formatNumber = (value) => {
     }).format(value);
 };
 
+const targetHREF = (products) => {
+
+    //search json products all key serial is null return _self else _blank
+    const isBlank = products.some((product) => product.serial === null);
+
+    return isBlank ? "_self" : "_blank";
+
+};
 
 </script>
 
@@ -133,12 +136,12 @@ const formatNumber = (value) => {
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
                         <DataTable v-model:filters="filters" paginator :rows="5" :value="props.garanties" tableStyle="min-width: 50rem" filterDisplay="col"
-                        :globalFilterFields="['correlative', 'total']" sortField="correlative" :sortOrder="-1" >
+                        :globalFilterFields="['invoice.correlative', 'invoice.customer.name']" sortField="correlative" :sortOrder="-1" >
                             <template #header>
                                 <div class="flex justify-content-end">
                                     <span class="p-input-icon-left">
                                         <i class="pi pi-search" />
-                                        <InputText v-model="filters['global'].value" placeholder="Buscar (Correlativo)" />
+                                        <InputText v-model="filters['global'].value" placeholder="Buscar (Correlativo,Cliente)" />
                                     </span>
                                 </div>
                             </template>
@@ -147,10 +150,15 @@ const formatNumber = (value) => {
                                     <span>#{{ data.invoice.correlative }}</span>
                                 </template>
                             </Column>
+                            <Column field="correlative" header="Cliente">
+                                <template #body="{data}">
+                                    <strong>{{ data.invoice.customer.name }}</strong>
+                                </template>
+                            </Column>
                             <Column style="min-width:8rem" header="Imprimir Garantia">
                                 <template #body="{data}">
                                     <div class="flex justify-center">
-                                        <a :href="route('garanty.pdf',data.id)" :target="blankValidation" class="flex justify-center w-full px-4 py-2 font-bold text-white bg-red-400 rounded hover:bg-red-500">
+                                        <a :href="route('garanty.pdf',data.id)" :target="targetHREF(data.garanty_products)" class="flex justify-center w-full px-4 py-2 font-bold text-white bg-red-400 rounded hover:bg-red-500">
                                             <i class="pi pi-print"></i>
                                         </a>
                                     </div>

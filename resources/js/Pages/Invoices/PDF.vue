@@ -1,6 +1,6 @@
 <template>
-<div class="bg-white p-2 mb-2">
-    <div class="flex justify-between items-center">
+<div class="p-2 mb-2 bg-white">
+    <div class="flex items-center justify-between">
         <div class="flex items-center">
             <img src="/img/teraminer.png" alt="" class="w-20">
             <span class="text-2xl font-bold text-[#6A3989] ml-2">TERAMINER</span>
@@ -8,7 +8,7 @@
         <div>
             <h1 class="text-2xl font-bold text-[#6A3989]">INVOICE</h1>
             <div class="flex flex-col items-center justify-start">
-                <table class="w-full border divide-x border-black text-center">
+                <table class="w-full text-center border border-black divide-x">
                     <tbody>
                         <tr>
                             <td class="p-2">Fecha</td>
@@ -51,7 +51,7 @@
     </div>
 
     <div class="mt-2">
-        <table class="w-full border border-black text-center">
+        <table class="w-full text-center border border-black">
             <thead>
                 <tr class="bg-[#6A3989] text-white">
                     <th>Nombre</th>
@@ -71,7 +71,7 @@
 
     <div class="mt-2">
         <!-- <h2 class="text-2xl font-bold text-[#6A3989]">PRODUCTOS</h2> -->
-        <table class="w-full border border-black text-center mb-15">
+        <table class="w-full text-center border border-black mb-15">
             <thead>
                 <tr class="bg-[#6A3989] text-white">
                     <th>Producto</th>
@@ -92,8 +92,8 @@
             </tbody>
         </table>
     </div>
-    <div class="flex justify-between mt-6 gap-12">
-        <table class="w-full border border-black text-center mb-15 text-sm">
+    <div class="flex justify-between gap-12 mt-6">
+        <table class="w-full text-sm text-center border border-black mb-15">
             <thead>
                 <tr class="bg-[#6A3989] text-white">
                     <th class="p-2">Instrucciones Especiales - Comentarios</th>
@@ -111,11 +111,11 @@
             </tbody>
         </table>
         <div class="mt-8 ">
-            <table class="w-full border divide-x border-black text-center">
+            <table class="w-full text-center border border-black divide-x">
                     <tbody>
                         <tr>
                             <td class="p-2">Sub-Total</td>
-                            <td class="p-2 font-bold text-xl">{{ formatNumber(invoice.subtotal) }}</td>
+                            <td class="p-2 text-xl font-bold">{{ formatNumber(invoice.subtotal) }}</td>
                         </tr>
                         <tr v-if="invoice.discount">
                             <td class="p-2">Descuento</td>
@@ -123,7 +123,7 @@
                         </tr>
                         <tr>
                             <td class="p-2">Total</td>
-                            <td class="p-2 font-bold text-xl">{{ formatNumber(invoice.total) }}</td>
+                            <td class="p-2 text-xl font-bold">{{ formatNumber(invoice.total) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -138,7 +138,6 @@
 
 </template>
 <script setup>
-import { ref } from 'vue';
 import { onMounted } from 'vue';
 
 const props = defineProps({

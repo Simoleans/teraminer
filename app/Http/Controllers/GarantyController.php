@@ -15,7 +15,7 @@ class GarantyController extends Controller
     public function index()
     {
         return Inertia::render('Garanty/Index', [
-            'garanties' => Garanty::with('invoice', 'garanty_products', 'garanty_products.product')
+            'garanties' => Garanty::with('invoice','invoice.customer', 'garanty_products', 'garanty_products.product')
                 ->whereHas('invoice', function ($query) {
                     $query->where('status', 1);
                 })->get(),
@@ -78,12 +78,12 @@ class GarantyController extends Controller
     public function serialUpdate(Request $request)
     {
         //rule serial unique
-       /*  $request->validate([
+        $request->validate([
             'serial' => 'required|unique:garanty_products,serial',
         ],
         [
             'serial.unique' => 'El serial ya ha sido registrado.',
-        ]); */
+        ]);
 
         $garanty_products = GarantyProduct::find($request->id);
         $garanty_products->serial = $request->serial;

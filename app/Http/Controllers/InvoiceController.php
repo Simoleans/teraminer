@@ -58,7 +58,7 @@ class InvoiceController extends Controller
                 GarantyProduct::create([
                     'garanty_id' => $garanty->id,
                     'product_id' => $product['id'],
-                    'serial' => $product['serial'],
+                    //'serial' => $product['serial'],
                 ]);
             }
         }

@@ -51,11 +51,49 @@ siguiente: algoritmo de minado SHA256, capacidad de minado 102TH.
 
 </template>
 <script setup>
+import { onMounted } from 'vue';
 const props = defineProps({
     garanty: {
         type: Object,
         required: true,
     },
 });
+
+onMounted(() => {
+  window.print();
+  setTimeout(() => {
+    alert('skjskj')
+    window.close(); // Esto cerrará la pestaña o ventana actual
+  }, 5000); // Espera 5 segundos antes de ejecutar window.close
+});
+
+
+const closeWindow = () => {
+  window.close();
+};
+
+// Ejemplo de una acción que cierra la ventana
+const handleClick = () => {
+  // Realiza la acción deseada
+  // ...
+
+  // Cierra la ventana
+  closeWindow();
+};
 </script>
+
+<style scoped>
+@media print {
+    .footer {
+      position: relative;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      color: black;
+      /* background-color: #6A3989; */
+      /* color: white; */
+      padding: 10px;
+      text-align: center;
+    }
+  }</style>
 

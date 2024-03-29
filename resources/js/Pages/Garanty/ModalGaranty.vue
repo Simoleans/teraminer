@@ -221,7 +221,7 @@ function onDetect(detectedCodes) {
 const selectedDevice = ref(null)
 const devices = ref([])
 
-onMounted(async () => {
+/* onMounted(async () => {
     devices.value = (await navigator.mediaDevices.enumerateDevices()).filter(
         ({ kind }) => kind === 'videoinput'
     )
@@ -229,7 +229,7 @@ onMounted(async () => {
     if (devices.value.length > 0) {
         selectedDevice.value = devices.value[0]
     }
-})
+}) */
 
   const trackFunctionOptions = [
   { text: 'nothing (default)', value: undefined },
