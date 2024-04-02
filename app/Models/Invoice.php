@@ -18,18 +18,19 @@ class Invoice extends Model
         'discount',
         'total',
         'correlative',
-        'status'
+        'status',
+        'user_id'
     ];
 
-    /* protected static function boot()
+    protected static function boot()
     {
         parent::boot();
 
         static::created(function ($model) {
             // Lógica que deseas ejecutar después de guardar los datos en el método store
-            $model->correlative = self::getNextCorrelative();
+            $model->user_id = auth()->id();
         });
-    } */
+    }
 
     public function setProductsAttribute($value)
     {
@@ -102,5 +103,10 @@ class Invoice extends Model
     public function shipment()
     {
         return $this->belongsTo(Shipment::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

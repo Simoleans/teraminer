@@ -118,7 +118,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        if ($product->invoices->count() > 0) {
+        if ($product->relationLoaded('invoices') && $product->invoices->count() > 0) {
             return redirect()->route('products.index')->with('error', 'No se puede eliminar el producto porque tiene ordenes asociadas');
         }
 

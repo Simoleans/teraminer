@@ -51,8 +51,12 @@ const web = 'https://teraminer.com.ve/';
                                     Ver Facturas
                                 </NavLink>
                                 <!-- garanty -->
-                                <NavLink :href="route('garanty.index')" :active="route().current('garanty.*')">
+                                <NavLink v-if="$page.props.auth.user.rol == 1" :href="route('garanty.index')" :active="route().current('garanty.*')">
                                     Garantias
+                                </NavLink>
+                                <!-- users -->
+                                <NavLink v-if="$page.props.auth.user.rol == 1" :href="route('users.index')" :active="route().current('users.*')">
+                                    Usuarios
                                 </NavLink>
 
                             </div>
@@ -88,13 +92,13 @@ const web = 'https://teraminer.com.ve/';
 
                                     <template #content>
                                         <DropdownLink :href="route('profile.edit')"> Perfil </DropdownLink>
-                                        <DropdownLink :href="route('data.index')"> Data </DropdownLink>
+                                        <DropdownLink v-if="$page.props.auth.user.rol == 1" :href="route('data.index')"> Data </DropdownLink>
                                         <a
                                             :href="web"
                                             class="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                                             target="_blank"
                                         >
-                                        Ir a Pagina
+                                        Ir a Teraminer.com.ve
                                         </a>
                                         <hr>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
@@ -167,7 +171,7 @@ const web = 'https://teraminer.com.ve/';
                             <ResponsiveNavLink :href="route('products.index')" class="text-white"> Productos </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('shipments.index')" class="text-white"> Envios </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('invoices.index')" class="text-white"> Ver Facturas </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('garanty.index')" class="text-white"> Garantias </ResponsiveNavLink>
+                            <ResponsiveNavLink v-if="$page.props.auth.user.rol == 1" :href="route('garanty.index')" class="text-white"> Garantias </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button" class="text-white">
                                 Salir
                             </ResponsiveNavLink>

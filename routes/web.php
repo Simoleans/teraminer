@@ -12,6 +12,7 @@ use App\Http\Controllers\GarantyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ShipmentController;
+use App\Http\Controllers\UserController;
 
 //models
 use App\Models\{Customer, Seller, Shipment,Product,Invoice};
@@ -53,6 +54,13 @@ Route::middleware('auth')->group(function () {
 
     //Data
     Route::resource('/data', DataController::class);
+
+    //user
+    Route::resource('/users', UserController::class);
+    //updateStatus
+    Route::put('/users/{user}/updateStatus', [UserController::class, 'updateStatus'])->name('users.updateStatus');
+    //restoreStatus
+    Route::put('/users/{user}/restoreStatus', [UserController::class, 'restoreStatus'])->name('users.restoreStatus');
 
     //sellers
     Route::resource('/sellers', SellerController::class);
