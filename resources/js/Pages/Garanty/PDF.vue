@@ -1,13 +1,14 @@
 <template>
+<div class="m-10">
     <div class="flex flex-col items-end justify-end text-[#6A3989] mb-8">
         <span class="text-3xl font-bold">TERAMINER</span>
-        <span class="text-2xl font-bold">CERTIFICADO DE GARANTIA ACIS </span>
+        <span class="text-2xl font-black">CERTIFICADO DE GARANTIA ACIS </span>
         <span class="text-2xl font-bold">WHATSMINER M30S+ 100T</span>
     </div>
 
     <div class="flex justify-center mb-5">
         Certificado que se otorga a {{ garanty.invoice.customer.name }} titular de cédula de identidad número
-{{ garanty.invoice.customer.id_card_number }}, residenciado en{{ garanty.invoice.customer.address }}, por la compra de ({{ garanty.garanty_products.length }}) equipos Whatsminer M30S+ 102T en condición de “nuevo”, cuya especificación es la
+{{ garanty.invoice.customer.id_card_number }}, residenciado en{{ garanty.invoice.customer.address }}, por la compra de ({{ garanty.garanty_products.length }}) equipos (Whatsminer M30S+ 102T) en condición de “nuevo”, cuya especificación es la
 siguiente: algoritmo de minado SHA256, capacidad de minado 102TH.
 
     </div>
@@ -16,7 +17,7 @@ siguiente: algoritmo de minado SHA256, capacidad de minado 102TH.
         CONDICIONES GENERALES DE GARANTÍA
     </div>
     <ol class="pl-5 font-normal list-decimal">
-        <li class="mb-2">Tendrá una vigencia de doce meses a partir de la fecha de entrega del equipo.</li>
+        <li class="mb-2">Tendrá una vigencia de 6 meses a partir de la fecha de entrega del equipo.</li>
         <li class="mb-2">Esta garantía comprende que, si durante el plazo de vigencia de la misma, se produjeran defectos imputables a la calidad del producto suministrado por la empresa Teraminer, estaría obligada al reemplazo del equipo.</li>
         <li class="mb-2">Esta garantía comprende que, si durante el plazo de vigencia de la misma, se produjeran defectos imputables al rendimiento del producto suministrado por la empresa Teraminer, estaría obligada al reemplazo del equipo.</li>
         <li class="mb-2">La garantía no tendrá validez si el beneficiario no cumple con los requerimientos mínimos de seguridad física y lógica para los equipos.</li>
@@ -40,12 +41,13 @@ siguiente: algoritmo de minado SHA256, capacidad de minado 102TH.
         <li v-for="product in garanty.garanty_products" :key="product.id" class="mb-2 font-bold">{{ product.serial }}</li>
     </ul>
 
-    <div class="flex">
-        <div class="w-full font-normal text-center">
+    <div class="flex items-center justify-left mt-4">
+        <div class="w-full font-normal text-left">
             <p class="mb-5">En Maracay, a los _______________ días del mes de _______________ de _______.</p>
             <p>Recibe conforme: _______________________</p>
         </div>
     </div>
+</div>
 
 
 
@@ -61,10 +63,9 @@ const props = defineProps({
 
 onMounted(() => {
   window.print();
-  setTimeout(() => {
-    alert('skjskj')
+  /* setTimeout(() => {
     window.close(); // Esto cerrará la pestaña o ventana actual
-  }, 5000); // Espera 5 segundos antes de ejecutar window.close
+  }, 5000); // Espera 5 segundos antes de ejecutar window.close */
 });
 
 
