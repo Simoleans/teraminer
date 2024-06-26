@@ -16,7 +16,7 @@ class InvoiceController extends Controller
     public function index()
     {
         return Inertia::render('Invoices/Index', [
-            'invoices' => Invoice::with(['customer', 'seller', 'shipment'])->get(),
+            'invoices' => Invoice::with(['customer', 'seller', 'shipment'])->orderBy('created_at', 'desc')->get(),
         ]);
     }
 
