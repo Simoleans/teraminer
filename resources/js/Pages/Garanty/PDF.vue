@@ -63,9 +63,9 @@ const props = defineProps({
 
 onMounted(() => {
   window.print();
-  /* setTimeout(() => {
+  setTimeout(() => {
     window.close(); // Esto cerrará la pestaña o ventana actual
-  }, 5000); // Espera 5 segundos antes de ejecutar window.close */
+  }, 5000); // Espera 5 segundos antes de ejecutar window.close
 });
 
 
