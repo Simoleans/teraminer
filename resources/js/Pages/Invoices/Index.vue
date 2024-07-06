@@ -190,15 +190,22 @@ const handleDelete = (id) => {
                   </div>
                 </template>
               </Column>
-              <Column field="correlative" header="Nùmero">
+              <Column style="min-width:8rem" header="Productos">
+                <template #body="{ data }">
+                  <div class="flex justify-between">
+                    <PrimaryButton class="mt-4" @click="openModal(data)" title="Ver Productos asociados esta factura"><i class="pi pi-eye" /></PrimaryButton>
+                  </div>
+                </template>
+              </Column>
+              <!-- <Column field="correlative" header="Nùmero">
                 <template #body="{ data }">
                   <span @click="openModal(data)" class="text-sm cursor-pointer">#{{ data.correlative }}</span>
                   <button @click="openModal(data)" class="text-white md:lg:invisible visible bg-blue-500 hover:bg-blue-500/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 me-2 mb-2">
                     Ver
                   </button>
                 </template>
-              </Column>
-              <Column style="min-width:8rem" header="Imprimir">
+              </Column> -->
+             <!--  <Column style="min-width:8rem" header="Imprimir">
                 <template #body="{ data }">
                   <div class="flex justify-between">
                     <a :href="route('invoices.pdf',data.id)" target="_blank" class="px-4 py-2 font-bold text-white bg-red-400 rounded hover:bg-red-500">
@@ -206,8 +213,8 @@ const handleDelete = (id) => {
                     </a>
                   </div>
                 </template>
-              </Column>
-              <Column field="subtotal" header="Sub-Total">
+              </Column> -->
+             <!--  <Column field="subtotal" header="Sub-Total">
                 <template #body="{ data }">
                   <span class="text-xl font-bold">{{ formatNumber(data.subtotal) }}</span><br>
                   <span v-if="dolar">{{ formatNumberVzla(parseFloat(dolar) * parseFloat(data.subtotal)) }}</span><br>
@@ -219,7 +226,7 @@ const handleDelete = (id) => {
                   <span v-if="data.discount > 0" class="font-bold">{{ totalDiscount(data.discount, data.subtotal) }}</span>
                   <span v-else class="font-bold text-green-600">N/T</span>
                 </template>
-              </Column>
+              </Column> -->
               <Column field="total" header="Total">
                 <template #body="{ data }">
                   <span class="text-xl font-bold">{{ formatNumber(data.total) }}</span><br>
@@ -227,13 +234,7 @@ const handleDelete = (id) => {
                   <span v-if="bitcoinPrice">{{ totalToBTC(data.subtotal) }} BTC</span>
                 </template>
               </Column>
-              <Column style="min-width:8rem" header="Productos">
-                <template #body="{ data }">
-                  <div class="flex justify-between">
-                    <PrimaryButton class="mt-4" @click="openModal(data)" title="Ver Productos asociados esta factura"><i class="pi pi-eye" /></PrimaryButton>
-                  </div>
-                </template>
-              </Column>
+
               <Column field="customer_id" header="Cliente">
                 <template #body="{ data }">
                   <span>{{ data.customer.name }}</span>
@@ -244,11 +245,11 @@ const handleDelete = (id) => {
                   <span>{{ data.seller.name }}</span>
                 </template>
               </Column>
-              <Column field="shipment_id" header="Tipo de envio">
+              <!-- <Column field="shipment_id" header="Tipo de envio">
                 <template #body="{ data }">
                   <span>{{ data.shipment?.name ?? 'N/T' }}</span>
                 </template>
-              </Column>
+              </Column> -->
               <template #footer>Total : {{ props.invoices ? props.invoices.length : 0 }} Facturas.</template>
             </DataTable>
           </div>
@@ -268,10 +269,15 @@ const handleDelete = (id) => {
           <p><strong>Vendedor:</strong> {{ selectedInvoice.seller.name }}</p>
           <p><strong>Tipo de envío:</strong> {{ selectedInvoice.shipment?.name ?? 'N/T' }}</p>
         </div>
-        <div class="flex justify-end mt-4">
-          <button @click="openSecondaryModal" class="text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center">
-            Ver Productos
-          </button>
+        <div class="flex justify-end mt-4 gap-5">
+            <button @click="openSecondaryModal" class="text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center">
+                Ver Productos
+            </button>
+            <div class="flex justify-between">
+                <a :href="route('invoices.pdf',selectedInvoice.id)" target="_blank" class="px-4 py-2 font-bold text-white bg-red-400 rounded hover:bg-red-500">
+                    <i class="pi pi-print"></i> Imprimir
+                </a>
+            </div>
         </div>
       </div>
     </Modal>

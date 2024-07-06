@@ -41,7 +41,7 @@ const web = 'https://teraminer.com.ve/';
                                     Clientes
                                 </NavLink>
                                 <NavLink :href="route('products.index')" :active="route().current('products.*')">
-                                    Productos
+                                    Equipos
                                 </NavLink>
                                 <!-- //shipment link -->
                                 <NavLink :href="route('shipments.index')" :active="route().current('shipments.*')">
@@ -168,7 +168,7 @@ const web = 'https://teraminer.com.ve/';
                             <hr class="border-t border-gray-700">
                             <ResponsiveNavLink :href="route('sellers.index')" class="text-white"> Vendedores </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('customers.index')" class="text-white"> Clientes </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('products.index')" class="text-white"> Productos </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('products.index')" class="text-white"> Equipos </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('shipments.index')" class="text-white"> Envios </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('invoices.index')" class="text-white"> Ver Facturas </ResponsiveNavLink>
                             <ResponsiveNavLink v-if="$page.props.auth.user.rol == 1" :href="route('garanty.index')" class="text-white"> Garantias </ResponsiveNavLink>

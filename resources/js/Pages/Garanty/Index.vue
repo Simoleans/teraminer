@@ -121,6 +121,12 @@ const targetHREF = (products) => {
 
 };
 
+const previewGaranty = (garantyData) => {
+    const url = route('garanty.preview', garantyData.id); // Asegúrate de tener una ruta definida para esto
+    window.open(url, 'Preview', 'width=794,height=900');
+};
+
+
 </script>
 
 <template>
@@ -153,6 +159,15 @@ const targetHREF = (products) => {
                             <Column field="correlative" header="Cliente">
                                 <template #body="{data}">
                                     <strong>{{ data.invoice.customer.name }}</strong>
+                                </template>
+                            </Column>
+                            <Column style="min-width:8rem" header="Previsualizar Garantía">
+                                <template #body="{data}">
+                                    <div class="flex justify-center">
+                                        <PrimaryButton @click="previewGaranty(data)" title="Previsualizar Garantía">
+                                            <i class="pi pi-eye"></i>
+                                        </PrimaryButton>
+                                    </div>
                                 </template>
                             </Column>
                             <Column style="min-width:8rem" header="Imprimir Garantia">

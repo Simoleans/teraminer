@@ -81,6 +81,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/garanty/serialUpdate', [GarantyController::class, 'serialUpdate'])->name('garanty.serialUpdate');
     //pdf
     Route::get('/garanty/{garanty}/pdf', [GarantyController::class, 'createPDF'])->name('garanty.pdf');
+    // Rutas de Web
+    Route::get('/garanties/preview/{garanty}', [GarantyController::class, 'preview'])->name('garanty.preview');
+
 
     //shipment
     Route::resource('/shipments',ShipmentController::class);

@@ -27,6 +27,7 @@ class GarantyController extends Controller
         ]);
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -117,6 +118,23 @@ class GarantyController extends Controller
 
         return Inertia::render('Garanty/PDF', [
             'garanty' => $garanty->load(['invoice.customer', 'garanty_products', 'garanty_products.product']),
+        ]);
+    }
+
+    public function preview(Garanty $garanty)
+    {
+        // Carga previa de los productos y sus detalles para la vista de previsualización
+        $garanty->load(['invoice.customer', 'garanty_products.product']);
+
+        // Filtra productos para excluir aquellos sin serial
+        $productsWithSerial = $garanty->garanty_products->filter(function ($product) {
+            return !is_null($product->serial);
+        });
+
+        // Incluye productos con serial en la vista
+        return Inertia::render('Garanty/GarantyPreview', [
+            'garanty' => $garanty,
+            'productsWithSerial' => $productsWithSerial
         ]);
     }
 
