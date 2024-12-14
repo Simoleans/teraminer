@@ -3,12 +3,12 @@
     <div class="flex flex-col items-end justify-end text-[#6A3989] mb-8">
         <span class="text-3xl font-bold">TERAMINER</span>
         <span class="text-2xl font-black">CERTIFICADO DE GARANTIA ACIS </span>
-        <span class="text-2xl font-bold">WHATSMINER M30S+ 100T</span>
+        <span class="text-2xl font-bold">{{ garanty.invoice.products[0].name.toUpperCase() }}</span>
     </div>
 
     <div class="flex justify-center mb-5">
         Certificado que se otorga a {{ garanty.invoice.customer.name }} titular de cédula de identidad número
-{{ garanty.invoice.customer.id_card_number }}, residenciado en{{ garanty.invoice.customer.address }}, por la compra de ({{ garanty.garanty_products.length }}) equipos (Whatsminer M30S+ 102T) en condición de “nuevo”, cuya especificación es la
+{{ garanty.invoice.customer.id_card_number }}, residenciado en {{ garanty.invoice.customer.address }}, por la compra de ({{ garanty.garanty_products.length }}) equipos ({{ garanty.invoice.products[0].name.toUpperCase() }}) en condición de “nuevo”, cuya especificación es la
 siguiente: algoritmo de minado SHA256, capacidad de minado 102TH.
 
     </div>
