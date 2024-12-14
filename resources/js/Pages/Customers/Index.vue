@@ -89,7 +89,7 @@ const handleDelete = (id) => {
             </Link>
           </div>
           <div class="p-6 text-gray-900">
-            <DataTable :value="props.customers" tableStyle="min-width: 50rem" v-model:expandedRows="expandedRows" dataKey="id"
+            <DataTable :value="props.customers"  v-model:expandedRows="expandedRows" dataKey="id"
             @rowExpand="onRowExpand" @rowCollapse="onRowCollapse" >
               <Column expander style="width: 5rem" />
               <!-- <Column field="id_card_number" header="Cédula/RIF">
