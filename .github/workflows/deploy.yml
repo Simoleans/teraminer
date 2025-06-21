@@ -26,7 +26,7 @@ jobs:
       - name: Upload Laravel Core to sistema
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ftp.TERAMINER.com.ve
+          server: ftp.teraminer.com.ve
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
@@ -53,20 +53,20 @@ jobs:
       - name: Upload Vite build to sistema/public/build
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ftp.TERAMINER.com.ve
+          server: ftp.teraminer.com.ve
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./public/build/
           server-dir: /sistema/public/build/
 
-      - name: Upload Vite build to panel.TERAMINER.com.ve/build
+      - name: Upload Vite build to panel.teraminer.com.ve/build
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ftp.TERAMINER.com.ve
+          server: ftp.teraminer.com.ve
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./public/build/
-          server-dir: /panel.TERAMINER.com.ve/build/
+          server-dir: /panel/build/
 
       - name: Ejecutar deploy.php con clave
         run: |
