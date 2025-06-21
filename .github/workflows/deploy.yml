@@ -70,4 +70,4 @@ jobs:
 
       - name: Ejecutar deploy.php con clave
         run: |
-          curl -s "https://panel.TERAMINER.com.ve/deploy.php?key=${{ secrets.DEPLOY_SECRET_KEY }}"
+          curl -s "https://panel.teraminer.com.ve/deploy.php?key=${{ secrets.DEPLOY_SECRET_KEY }}"
