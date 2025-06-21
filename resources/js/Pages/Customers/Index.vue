@@ -8,6 +8,8 @@ import Modal from '@/Components/Modal.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { ref } from 'vue';
+import { FilterMatchMode } from 'primevue/api';
+import InputText from 'primevue/inputtext';
 
 const props = defineProps({
   customers: {
@@ -70,6 +72,9 @@ const handleDelete = (id) => {
     }
   });
 };
+const filters = ref({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+});
 </script>
 
 <template>
@@ -89,8 +94,16 @@ const handleDelete = (id) => {
             </Link>
           </div>
           <div class="p-6 text-gray-900">
-            <DataTable :value="props.customers"  v-model:expandedRows="expandedRows" dataKey="id"
-            @rowExpand="onRowExpand" @rowCollapse="onRowCollapse" >
+            <DataTable :value="props.customers"  v-model:filters="filters" dataKey="id"
+             :globalFilterFields="['name']" v-model:expandedRows="expandedRows" @rowExpand="onRowExpand" @rowCollapse="onRowCollapse" >
+            <template #header>
+                <div class="flex justify-content-end">
+                  <span class="p-input-icon-left">
+                    <i class="pi pi-search" />
+                    <InputText v-model="filters['global'].value" placeholder="Buscar (Nombre)" />
+                  </span>
+                </div>
+              </template>
               <Column expander style="width: 5rem" />
               <!-- <Column field="id_card_number" header="Cédula/RIF">
                 <template #body="{ data }">
