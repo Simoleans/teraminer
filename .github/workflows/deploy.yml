@@ -16,7 +16,7 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          composer install --no-dev --optimize-autoloader
+          composer update
 
       - name: Build frontend assets
         run: |
