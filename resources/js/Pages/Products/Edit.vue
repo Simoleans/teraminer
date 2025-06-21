@@ -229,7 +229,7 @@ const handleEditProduct = () => {
                         <form @submit.prevent="handleEditProduct()" method="POST">
 
                             <div class="mt-4">
-                                <InputLabel for="code_number" value="Cédula" />
+                                <InputLabel for="code_number" value="Código" />
                                 <TextInput id="code_number" class="block w-full mt-1" type="text" name="code_number" v-model="formData.code_number"  required autofocus />
                             </div>
 
